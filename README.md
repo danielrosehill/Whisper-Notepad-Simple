@@ -1,0 +1,1 @@
+# Whisper-Notepad-Simple
