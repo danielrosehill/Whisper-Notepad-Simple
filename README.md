@@ -4,11 +4,11 @@
 
  This version of a speech to text transcription notepad for Linux is a simplified version of a previous configuration that I created also using AI code generation. 
 
- This streamlined version of the previous app Dispenses, was the large library of system prompts in order to provide a more simple utility which simply applies one default text transformation prompt in order to likely clean up the text received from Whisper. 
+ This streamlined version of the previous app dispenses with the large library of system prompts in order to provide a more simple utility which simply applies one default text transformation prompt in order to lightly clean up the text received from Whisper. 
 
- The UI features the ability to save your Open AI, API key, as well as set a default input microphone device. There is the option to apply the post recording processing or you can choose not to apply it by unticking the box. 
+ The UI features the ability to save your Open AI API key, as well as set a default input microphone device, both of with persist in a simple local memory file. There is the option to apply the post recording processing or you can choose not to apply it by unticking the box. 
 
- The arrow transcription populates into the first window and the cleaned up transcription into the second. In favor of simplicity, in this version, the ability to manually go from the 1st to the 2nd stages was dispensed with. 
+ The arrow transcription populates into the first window and the cleaned up transcription into the second. In favor of simplicity, in this version, the ability to manually go from the 1st to the 2nd stages was dispensed with (in other words; you cannot manually initiatiate the cleanup process after having initially chosen not to engage it). 
 
  This utility works well to provide affordable speech to text translation suitable for any purpose at all. I use it to capture prompts using my voice and use the light cleanup utility to make them more intelligible and easier to parse for AI tools. 
 
