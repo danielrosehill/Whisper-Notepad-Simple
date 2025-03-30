@@ -33,7 +33,7 @@ from PySide6.QtWidgets import (
     QCheckBox, QSplitter, QFrame
 )
 from PySide6.QtCore import Qt, QSettings, QTimer, Signal, QObject, Slot
-from PySide6.QtGui import QIcon, QFont, QAction, QClipboard
+from PySide6.QtGui import QIcon, QFont, QAction, QClipboard, QPalette
 
 # Constants
 APP_NAME = "Whisper Notepad Simple"
@@ -439,16 +439,18 @@ class CleanupThread(QObject):
                 self.error.emit("No text to clean up.")
                 return
             
-            # Basic system prompt for text cleanup
-            system_prompt = """You are a text cleanup assistant. Your task is to:
-1. Fix grammar, spelling, and punctuation errors
-2. Ensure proper capitalization and sentence structure
-3. Remove filler words and verbal tics
-4. Maintain the original meaning and content
-5. Format the text into clear paragraphs
-6. Do not add any new information or change the meaning of the text
+            # Enhanced system prompt for text cleanup
+            system_prompt = """You are a transcription processing assistant. Your task is to transform raw dictation into a readable and presentable format by:
 
-The text is from a voice recording that was transcribed automatically, so it may contain errors typical of speech-to-text conversion."""
+1. Adjusting spacing and paragraph structure for better readability
+2. Fixing grammar, spelling, and punctuation errors
+3. Ensuring proper capitalization and sentence structure
+4. Removing filler words, verbal tics, and repetitions
+5. Maintaining the original meaning and all crucial information
+6. Organizing ideas into logical paragraphs
+7. Making light edits for clarity where appropriate
+
+The text is from a voice recording that was transcribed automatically. Focus on improving readability while preserving all meaningful content. Do not add new information or change the meaning of the original text."""
             
             response = openai.chat.completions.create(
                 model="gpt-3.5-turbo",
@@ -508,7 +510,16 @@ class WhisperNotepadApp(QMainWindow):
         device_group = QGroupBox("Audio Device")
         device_layout = QVBoxLayout(device_group)
         self.device_combo = QComboBox()
-        device_layout.addWidget(self.device_combo)
+        
+        # Add save default device button
+        device_button_layout = QHBoxLayout()
+        self.save_default_device_button = QPushButton("Set as Default")
+        self.save_default_device_button.setToolTip("Save selected device as default")
+        self.save_default_device_button.clicked.connect(self.save_default_device)
+        device_button_layout.addWidget(self.device_combo)
+        device_button_layout.addWidget(self.save_default_device_button)
+        
+        device_layout.addLayout(device_button_layout)
         top_layout.addWidget(device_group)
         
         # Recording controls
@@ -516,28 +527,36 @@ class WhisperNotepadApp(QMainWindow):
         recording_layout = QHBoxLayout(recording_group)
         
         # Record button with icon
-        self.record_button = QPushButton("Record")
-        self.record_button.setIcon(QIcon.fromTheme("media-record", QIcon.fromTheme("media-playback-start")))
+        self.record_button = QPushButton("⏺")
         self.record_button.setToolTip("Start Recording")
         self.record_button.clicked.connect(self.start_recording)
+        self.record_button.setFixedWidth(40)
         
         # Pause button with icon
-        self.pause_button = QPushButton("Pause")
-        self.pause_button.setIcon(QIcon.fromTheme("media-playback-pause"))
+        self.pause_button = QPushButton("⏸")
         self.pause_button.setToolTip("Pause Recording")
         self.pause_button.clicked.connect(self.pause_recording)
         self.pause_button.setEnabled(False)
+        self.pause_button.setFixedWidth(40)
         
         # Stop button with icon
-        self.stop_button = QPushButton("Stop")
-        self.stop_button.setIcon(QIcon.fromTheme("media-playback-stop"))
+        self.stop_button = QPushButton("⏹")
         self.stop_button.setToolTip("Stop Recording")
         self.stop_button.clicked.connect(self.stop_recording)
         self.stop_button.setEnabled(False)
+        self.stop_button.setFixedWidth(40)
+        
+        # Clear recording button
+        self.clear_recording_button = QPushButton("🗑")
+        self.clear_recording_button.setToolTip("Clear Recording")
+        self.clear_recording_button.clicked.connect(self.clear_recording)
+        self.clear_recording_button.setEnabled(False)
+        self.clear_recording_button.setFixedWidth(40)
         
         recording_layout.addWidget(self.record_button)
         recording_layout.addWidget(self.pause_button)
         recording_layout.addWidget(self.stop_button)
+        recording_layout.addWidget(self.clear_recording_button)
         top_layout.addWidget(recording_group)
         
         # Process controls
@@ -545,9 +564,9 @@ class WhisperNotepadApp(QMainWindow):
         process_layout = QVBoxLayout(process_group)
         
         # Add checkbox for text cleanup
-        self.cleanup_checkbox = QCheckBox("Apply Text Cleanup")
+        self.cleanup_checkbox = QCheckBox("Process Transcription")
         self.cleanup_checkbox.setChecked(True)
-        self.cleanup_checkbox.setToolTip("Apply AI-powered text cleanup to improve readability")
+        self.cleanup_checkbox.setToolTip("Apply AI-powered text processing to improve readability")
         process_layout.addWidget(self.cleanup_checkbox)
         
         # Transcribe button
@@ -589,6 +608,17 @@ class WhisperNotepadApp(QMainWindow):
         
         self.raw_text = QTextEdit()
         self.raw_text.setReadOnly(True)
+        
+        # Set raw text to be lighter and smaller
+        raw_font = self.raw_text.font()
+        raw_font.setPointSize(raw_font.pointSize() - 1)
+        self.raw_text.setFont(raw_font)
+        
+        # Set text color to light gray
+        raw_palette = self.raw_text.palette()
+        raw_palette.setColor(QPalette.ColorRole.Text, Qt.GlobalColor.gray)
+        self.raw_text.setPalette(raw_palette)
+        
         raw_layout.addWidget(self.raw_text)
         middle_section.addWidget(raw_group)
         
@@ -698,11 +728,20 @@ class WhisperNotepadApp(QMainWindow):
                 self.device_combo.addItem(name, idx)
             
             # Set the default device from config if available
-            default_device = self.config.get("default_device")
-            if default_device is not None:
+            default_device_id = self.config.get("default_device_id")
+            default_device_name = self.config.get("default_device")
+            
+            # First try to set by device ID (more reliable)
+            if default_device_id is not None:
+                for i in range(self.device_combo.count()):
+                    if self.device_combo.itemData(i) == default_device_id:
+                        self.device_combo.setCurrentIndex(i)
+                        break
+            # If that fails, try by name
+            elif default_device_name is not None:
                 # Try to find by partial match since we added sample rate info
                 for i in range(self.device_combo.count()):
-                    if default_device in self.device_combo.itemText(i):
+                    if default_device_name in self.device_combo.itemText(i):
                         self.device_combo.setCurrentIndex(i)
                         break
             
@@ -716,18 +755,31 @@ class WhisperNotepadApp(QMainWindow):
         except Exception as e:
             self.show_error(f"Error loading audio devices: {str(e)}")
     
+    def save_default_device(self):
+        """Save the currently selected device as the default."""
+        if self.device_combo.currentIndex() >= 0:
+            device_idx = self.device_combo.currentData()
+            device_text = self.device_combo.currentText()
+            # Extract just the device name without the sample rate
+            device_name = device_text.split(" (")[0] if " (" in device_text else device_text
+            
+            self.config["default_device"] = device_name
+            self.config["default_device_id"] = device_idx
+            self.save_config()
+            self.statusBar().showMessage(f"Device '{device_name}' set as default", 3000)
+    
+    def clear_recording(self):
+        """Clear the current recording."""
+        self.temp_audio_file = None
+        self.transcribe_button.setEnabled(False)
+        self.clear_recording_button.setEnabled(False)
+        self.statusBar().showMessage("Recording cleared", 3000)
+    
     def start_recording(self):
         """Start recording audio from the selected device."""
         try:
             # Get selected device
             device_idx = self.device_combo.currentData()
-            
-            # Save the selected device as default (just the device name without sample rate)
-            device_text = self.device_combo.currentText()
-            # Extract just the device name without the sample rate
-            device_name = device_text.split(" (")[0] if " (" in device_text else device_text
-            self.config["default_device"] = device_name
-            self.save_config()
             
             # Create and start recording thread
             self.recording_thread = RecordingThread(device_idx)
@@ -738,6 +790,7 @@ class WhisperNotepadApp(QMainWindow):
             self.record_button.setEnabled(False)
             self.pause_button.setEnabled(True)
             self.stop_button.setEnabled(True)
+            self.clear_recording_button.setEnabled(False)
             self.statusBar().showMessage("Recording...")
             
             # Start recording
@@ -780,47 +833,84 @@ class WhisperNotepadApp(QMainWindow):
     
     def on_recording_finished(self):
         """Handle the completion of the recording process."""
-        # Update UI
-        self.record_button.setEnabled(True)
-        self.pause_button.setEnabled(False)
-        self.pause_button.setText("Pause")
-        self.stop_button.setEnabled(False)
-        
-        # Get the temporary audio file path
-        self.temp_audio_file = self.recording_thread.temp_file_path
-        
-        # Enable transcription button
-        self.transcribe_button.setEnabled(True)
-        self.statusBar().showMessage("Recording saved. Click 'Transcribe' to process it.")
+        try:
+            # Get the temporary file path from the recording thread
+            if hasattr(self.recording_thread, 'temp_file_path'):
+                self.temp_audio_file = self.recording_thread.temp_file_path
+                
+                # Update UI
+                self.record_button.setEnabled(True)
+                self.pause_button.setEnabled(False)
+                self.stop_button.setEnabled(False)
+                self.transcribe_button.setEnabled(True)
+                self.clear_recording_button.setEnabled(True)
+                
+                # Stop and clear the timer
+                if hasattr(self, 'recording_timer'):
+                    self.recording_timer.stop()
+                
+                self.statusBar().showMessage("Recording finished. Ready to transcribe.")
+            else:
+                self.record_button.setEnabled(True)
+                self.pause_button.setEnabled(False)
+                self.stop_button.setEnabled(False)
+                self.statusBar().showMessage("Recording failed or was too short.")
+                
+            # Clean up
+            self.recording_thread = None
+        except Exception as e:
+            self.show_error(f"Error finalizing recording: {str(e)}")
     
     def transcribe_audio(self):
         """Transcribe the recorded audio."""
-        if not self.temp_audio_file or not os.path.exists(self.temp_audio_file):
-            self.show_error("No recording available to transcribe")
+        if not self.temp_audio_file:
+            self.show_error("No recording to transcribe.")
             return
             
-        # Start transcription
-        self.statusBar().showMessage("Transcribing audio...")
-        self.transcription_thread = TranscriptionThread(self.temp_audio_file)
-        self.transcription_thread.finished.connect(self.on_transcription_finished)
-        self.transcription_thread.error.connect(self.show_error)
-        self.transcription_thread.progress.connect(self.statusBar().showMessage)
-        
-        # Start transcription in a new thread
-        threading.Thread(target=self.transcription_thread.transcribe).start()
-    
+        try:
+            # Check if API key is set
+            if not openai.api_key:
+                self.show_error("OpenAI API key is not set. Please set it in Settings > Set OpenAI API Key.")
+                return
+                
+            # Update UI
+            self.transcribe_button.setText("Transcribing...")
+            self.transcribe_button.setEnabled(False)
+            self.statusBar().showMessage("Transcribing audio...")
+            
+            # Create and start transcription thread
+            self.transcription_thread = TranscriptionThread(self.temp_audio_file)
+            self.transcription_thread.finished.connect(self.on_transcription_finished)
+            self.transcription_thread.error.connect(self.show_error)
+            self.transcription_thread.progress.connect(lambda msg: self.statusBar().showMessage(msg))
+            
+            # Start transcription in a separate thread
+            threading.Thread(target=self.transcription_thread.transcribe).start()
+        except Exception as e:
+            self.transcribe_button.setText("Transcribe")
+            self.transcribe_button.setEnabled(True)
+            self.show_error(f"Error starting transcription: {str(e)}")
+            
     def on_transcription_finished(self, text):
         """Handle the completion of the transcription process."""
-        # Update UI with transcription
-        self.raw_text.setText(text)
-        
-        # If cleanup is enabled, proceed with cleanup
-        if self.cleanup_checkbox.isChecked():
-            self.cleanup_text(text)
-        else:
-            # Otherwise, just copy the raw text to the cleaned text area
-            self.cleaned_text.setText(text)
-            self.statusBar().showMessage("Transcription complete.")
+        try:
+            # Reset transcribe button
+            self.transcribe_button.setText("Transcribe")
+            self.transcribe_button.setEnabled(True)
+            
+            # Display the raw transcription
+            self.raw_text.setText(text)
+            
+            # If cleanup is enabled, process the text
+            if self.cleanup_checkbox.isChecked():
+                self.statusBar().showMessage("Processing transcription...")
+                self.cleanup_text(text)
+            else:
+                # Otherwise, just copy the raw text to the cleaned area
+                self.cleaned_text.setText(text)
+                self.statusBar().showMessage("Transcription complete.")
+        except Exception as e:
+            self.show_error(f"Error processing transcription: {str(e)}")
     
     def cleanup_text(self, text):
         """Clean up the transcript using GPT."""
@@ -928,7 +1018,7 @@ class WhisperNotepadApp(QMainWindow):
         """Set the OpenAI API Key."""
         from PySide6.QtWidgets import QInputDialog, QLineEdit, QMessageBox
         
-        current_key = self.config.get("api_key", "")
+        current_key = self.config.get("api_key", os.environ.get("OPENAI_API_KEY", ""))
         api_key, ok = QInputDialog.getText(
             self, "OpenAI API Key", "Enter your OpenAI API Key:",
             QLineEdit.Password, current_key
@@ -978,13 +1068,15 @@ class WhisperNotepadApp(QMainWindow):
             else:
                 self.config = {
                     "api_key": os.environ.get("OPENAI_API_KEY", ""),
-                    "default_device": None
+                    "default_device": None,
+                    "default_device_id": None
                 }
         except Exception as e:
             print(f"Error loading config: {e}")
             self.config = {
                 "api_key": os.environ.get("OPENAI_API_KEY", ""),
-                "default_device": None
+                "default_device": None,
+                "default_device_id": None
             }
     
     def save_config(self):
