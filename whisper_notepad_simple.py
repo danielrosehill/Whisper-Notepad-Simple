@@ -30,10 +30,10 @@ import openai
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QPushButton, QTextEdit, QComboBox,
     QVBoxLayout, QHBoxLayout, QLabel, QFileDialog, QMessageBox, QGroupBox,
-    QCheckBox, QSplitter, QFrame
+    QCheckBox, QSplitter, QFrame, QToolButton, QProgressBar, QStyle
 )
 from PySide6.QtCore import Qt, QSettings, QTimer, Signal, QObject, Slot
-from PySide6.QtGui import QIcon, QFont, QAction, QClipboard, QPalette
+from PySide6.QtGui import QIcon, QFont, QAction, QClipboard, QPalette, QColor, QKeySequence, QShortcut, QPainter, QPixmap
 
 # Constants
 APP_NAME = "Whisper Notepad Simple"
@@ -480,17 +480,22 @@ class WhisperNotepadApp(QMainWindow):
         self.transcription_thread = None
         self.cleanup_thread = None
         self.temp_audio_file = None
+        self.recording_timer = None
+        self.recording_time = 0
+        self.is_recording = False
+        self.is_paused = False
         
         # Load configuration
         self.load_config()
         
-        # Initialize OpenAI API
-        openai.api_key = self.config.get("api_key", os.environ.get("OPENAI_API_KEY", ""))
+        # Set OpenAI API key if available
+        if "api_key" in self.config and self.config["api_key"]:
+            openai.api_key = self.config["api_key"]
         
-        # Set up the UI
+        # Initialize UI
         self.init_ui()
         
-        # Load available audio devices
+        # Load audio devices
         self.load_audio_devices()
     
     def init_ui(self):
@@ -498,23 +503,32 @@ class WhisperNotepadApp(QMainWindow):
         self.setWindowTitle(APP_NAME)
         self.setMinimumSize(900, 700)
         
+        # Set application style
+        self.setup_style()
+        
         # Create central widget and main layout
         central_widget = QWidget()
         main_layout = QVBoxLayout(central_widget)
+        main_layout.setContentsMargins(10, 10, 10, 10)
+        main_layout.setSpacing(10)
         
         # Create top section with audio controls
         top_section = QWidget()
         top_layout = QHBoxLayout(top_section)
+        top_layout.setContentsMargins(0, 0, 0, 0)
+        top_layout.setSpacing(10)
         
         # Audio device selection
         device_group = QGroupBox("Audio Device")
         device_layout = QVBoxLayout(device_group)
         self.device_combo = QComboBox()
+        self.device_combo.setMinimumHeight(30)
         
         # Add save default device button
         device_button_layout = QHBoxLayout()
         self.save_default_device_button = QPushButton("Set as Default")
-        self.save_default_device_button.setToolTip("Save selected device as default")
+        self.save_default_device_button.setToolTip("Save selected device as default (Ctrl+D)")
+        self.save_default_device_button.setMinimumHeight(30)
         self.save_default_device_button.clicked.connect(self.save_default_device)
         device_button_layout.addWidget(self.device_combo)
         device_button_layout.addWidget(self.save_default_device_button)
@@ -524,47 +538,74 @@ class WhisperNotepadApp(QMainWindow):
         
         # Recording controls
         recording_group = QGroupBox("Recording")
-        recording_layout = QHBoxLayout(recording_group)
+        recording_layout = QVBoxLayout(recording_group)
         
-        # Record button with icon
-        self.record_button = QPushButton("⏺")
-        self.record_button.setToolTip("Start Recording")
+        # Add recording time display
+        self.time_display = QLabel("00:00")
+        self.time_display.setAlignment(Qt.AlignCenter)
+        self.time_display.setStyleSheet("font-size: 16px; font-weight: bold;")
+        recording_layout.addWidget(self.time_display)
+        
+        # Button layout
+        buttons_layout = QHBoxLayout()
+        buttons_layout.setSpacing(5)
+        
+        # Record button with custom icon
+        self.record_button = QPushButton()
+        self.record_button.setToolTip("Start Recording (F5)")
         self.record_button.clicked.connect(self.start_recording)
-        self.record_button.setFixedWidth(40)
+        self.record_button.setMinimumSize(40, 40)
+        
+        # Create a custom recording icon (red circle)
+        record_pixmap = QPixmap(16, 16)
+        record_pixmap.fill(Qt.transparent)
+        painter = QPainter(record_pixmap)
+        painter.setRenderHint(QPainter.Antialiasing)
+        painter.setBrush(QColor(255, 0, 0))  # Red color
+        painter.setPen(Qt.NoPen)
+        painter.drawEllipse(2, 2, 12, 12)
+        painter.end()
+        self.record_button.setIcon(QIcon(record_pixmap))
         
         # Pause button with icon
-        self.pause_button = QPushButton("⏸")
-        self.pause_button.setToolTip("Pause Recording")
+        self.pause_button = QPushButton()
+        self.pause_button.setIcon(self.style().standardIcon(QStyle.SP_MediaPause))
+        self.pause_button.setToolTip("Pause Recording (F6)")
         self.pause_button.clicked.connect(self.pause_recording)
         self.pause_button.setEnabled(False)
-        self.pause_button.setFixedWidth(40)
+        self.pause_button.setMinimumSize(40, 40)
         
         # Stop button with icon
-        self.stop_button = QPushButton("⏹")
-        self.stop_button.setToolTip("Stop Recording")
+        self.stop_button = QPushButton()
+        self.stop_button.setIcon(self.style().standardIcon(QStyle.SP_MediaStop))
+        self.stop_button.setToolTip("Stop Recording (F7)")
         self.stop_button.clicked.connect(self.stop_recording)
         self.stop_button.setEnabled(False)
-        self.stop_button.setFixedWidth(40)
+        self.stop_button.setMinimumSize(40, 40)
         
-        # Stop & Transcribe button
-        self.stop_and_transcribe_button = QPushButton("⏹→")
-        self.stop_and_transcribe_button.setToolTip("Stop Recording & Transcribe")
+        # Stop & Transcribe button with icon
+        self.stop_and_transcribe_button = QPushButton()
+        self.stop_and_transcribe_button.setIcon(self.style().standardIcon(QStyle.SP_MediaSkipForward))
+        self.stop_and_transcribe_button.setToolTip("Stop Recording & Transcribe (F8)")
         self.stop_and_transcribe_button.clicked.connect(self.stop_and_transcribe)
         self.stop_and_transcribe_button.setEnabled(False)
-        self.stop_and_transcribe_button.setFixedWidth(60)
+        self.stop_and_transcribe_button.setMinimumSize(40, 40)
         
         # Clear recording button
-        self.clear_recording_button = QPushButton("🗑")
-        self.clear_recording_button.setToolTip("Clear Recording")
+        self.clear_recording_button = QPushButton()
+        self.clear_recording_button.setIcon(self.style().standardIcon(QStyle.SP_DialogDiscardButton))
+        self.clear_recording_button.setToolTip("Clear Recording (Ctrl+Shift+C)")
         self.clear_recording_button.clicked.connect(self.clear_recording)
         self.clear_recording_button.setEnabled(False)
-        self.clear_recording_button.setFixedWidth(40)
+        self.clear_recording_button.setMinimumSize(40, 40)
         
-        recording_layout.addWidget(self.record_button)
-        recording_layout.addWidget(self.pause_button)
-        recording_layout.addWidget(self.stop_button)
-        recording_layout.addWidget(self.stop_and_transcribe_button)
-        recording_layout.addWidget(self.clear_recording_button)
+        buttons_layout.addWidget(self.record_button)
+        buttons_layout.addWidget(self.pause_button)
+        buttons_layout.addWidget(self.stop_button)
+        buttons_layout.addWidget(self.stop_and_transcribe_button)
+        buttons_layout.addWidget(self.clear_recording_button)
+        recording_layout.addLayout(buttons_layout)
+        
         top_layout.addWidget(recording_group)
         
         # Process controls
@@ -580,14 +621,16 @@ class WhisperNotepadApp(QMainWindow):
         # Transcribe button
         button_layout = QHBoxLayout()
         self.transcribe_button = QPushButton("Transcribe")
-        self.transcribe_button.setToolTip("Transcribe the recorded audio")
+        self.transcribe_button.setToolTip("Transcribe the recorded audio (Ctrl+T)")
         self.transcribe_button.clicked.connect(self.transcribe_audio)
         self.transcribe_button.setEnabled(False)
+        self.transcribe_button.setMinimumHeight(40)
         
         # Clear button
         self.clear_button = QPushButton("Clear All")
-        self.clear_button.setToolTip("Clear all transcripts")
+        self.clear_button.setToolTip("Clear all transcripts (Ctrl+N)")
         self.clear_button.clicked.connect(self.new_note)
+        self.clear_button.setMinimumHeight(40)
         
         button_layout.addWidget(self.transcribe_button)
         button_layout.addWidget(self.clear_button)
@@ -599,6 +642,8 @@ class WhisperNotepadApp(QMainWindow):
         
         # Create middle section with transcription areas
         middle_section = QSplitter(Qt.Vertical)
+        middle_section.setHandleWidth(8)
+        middle_section.setChildrenCollapsible(False)
         
         # Raw transcription area
         raw_group = QGroupBox("Raw Transcription")
@@ -607,8 +652,8 @@ class WhisperNotepadApp(QMainWindow):
         # Add copy button for raw text
         raw_top_layout = QHBoxLayout()
         self.raw_copy_button = QPushButton("Copy")
-        self.raw_copy_button.setIcon(QIcon.fromTheme("edit-copy"))
-        self.raw_copy_button.setToolTip("Copy to Clipboard")
+        self.raw_copy_button.setIcon(self.style().standardIcon(QStyle.SP_DialogSaveButton))
+        self.raw_copy_button.setToolTip("Copy to Clipboard (Ctrl+Shift+R)")
         self.raw_copy_button.clicked.connect(lambda: self.copy_text_to_clipboard(self.raw_text))
         raw_top_layout.addStretch()
         raw_top_layout.addWidget(self.raw_copy_button)
@@ -616,57 +661,188 @@ class WhisperNotepadApp(QMainWindow):
         
         self.raw_text = QTextEdit()
         self.raw_text.setReadOnly(True)
+        self.raw_text.setStyleSheet("""
+            QTextEdit {
+                background-color: #f8f8f8;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                padding: 8px;
+                font-family: 'Segoe UI', Arial, sans-serif;
+            }
+        """)
         
         # Set raw text to be lighter and smaller
         raw_font = self.raw_text.font()
         raw_font.setPointSize(raw_font.pointSize() - 1)
         self.raw_text.setFont(raw_font)
-        
-        # Set text color to light gray
-        raw_palette = self.raw_text.palette()
-        raw_palette.setColor(QPalette.ColorRole.Text, Qt.GlobalColor.gray)
-        self.raw_text.setPalette(raw_palette)
-        
         raw_layout.addWidget(self.raw_text)
+        
         middle_section.addWidget(raw_group)
         
-        # Cleaned transcription area
-        cleaned_group = QGroupBox("Clean Transcription")
-        cleaned_layout = QVBoxLayout(cleaned_group)
+        # Clean transcription area
+        clean_group = QGroupBox("Clean Transcription")
+        clean_layout = QVBoxLayout(clean_group)
         
-        # Add copy button for cleaned text
-        cleaned_top_layout = QHBoxLayout()
-        self.copy_button = QPushButton("Copy")
-        self.copy_button.setIcon(QIcon.fromTheme("edit-copy"))
-        self.copy_button.setToolTip("Copy to Clipboard")
-        self.copy_button.clicked.connect(lambda: self.copy_text_to_clipboard(self.cleaned_text))
+        # Add buttons for clean text
+        clean_top_layout = QHBoxLayout()
         
-        # Add save button
+        self.clean_copy_button = QPushButton("Copy")
+        self.clean_copy_button.setIcon(self.style().standardIcon(QStyle.SP_DialogSaveButton))
+        self.clean_copy_button.setToolTip("Copy to Clipboard (Ctrl+Shift+C)")
+        self.clean_copy_button.clicked.connect(lambda: self.copy_text_to_clipboard(self.cleaned_text))
+        
         self.save_button = QPushButton("Save")
-        self.save_button.setIcon(QIcon.fromTheme("document-save"))
-        self.save_button.setToolTip("Save to File")
+        self.save_button.setIcon(self.style().standardIcon(QStyle.SP_DialogSaveButton))
+        self.save_button.setToolTip("Save to File (Ctrl+S)")
         self.save_button.clicked.connect(self.save_note)
         
-        cleaned_top_layout.addStretch()
-        cleaned_top_layout.addWidget(self.copy_button)
-        cleaned_top_layout.addWidget(self.save_button)
-        cleaned_layout.addLayout(cleaned_top_layout)
+        self.load_button = QPushButton("Load")
+        self.load_button.setIcon(self.style().standardIcon(QStyle.SP_DialogOpenButton))
+        self.load_button.setToolTip("Load from File (Ctrl+O)")
+        self.load_button.clicked.connect(self.load_note)
+        
+        clean_top_layout.addStretch()
+        clean_top_layout.addWidget(self.clean_copy_button)
+        clean_top_layout.addWidget(self.save_button)
+        clean_top_layout.addWidget(self.load_button)
+        clean_layout.addLayout(clean_top_layout)
         
         self.cleaned_text = QTextEdit()
-        cleaned_layout.addWidget(self.cleaned_text)
+        self.cleaned_text.setStyleSheet("""
+            QTextEdit {
+                background-color: #ffffff;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                padding: 8px;
+                font-family: 'Segoe UI', Arial, sans-serif;
+            }
+        """)
+        clean_layout.addWidget(self.cleaned_text)
         
-        middle_section.addWidget(cleaned_group)
+        middle_section.addWidget(clean_group)
         
-        main_layout.addWidget(middle_section, 1)  # Give it a stretch factor of 1
+        # Set initial sizes for the splitter
+        middle_section.setSizes([300, 400])
+        
+        main_layout.addWidget(middle_section, 1)
+        
+        # Status bar
+        self.statusBar().showMessage("Ready")
         
         # Set central widget
         self.setCentralWidget(central_widget)
         
-        # Create status bar
-        self.statusBar().showMessage("Ready")
-        
         # Create menu bar
         self.create_menu_bar()
+        
+        # Setup keyboard shortcuts
+        self.setup_shortcuts()
+        
+        # Setup recording timer
+        self.recording_timer = QTimer()
+        self.recording_timer.timeout.connect(self.update_recording_time)
+        
+    def setup_style(self):
+        """Set up the application style."""
+        # Set application-wide stylesheet
+        self.setStyleSheet("""
+            QMainWindow {
+                background-color: #f5f5f5;
+            }
+            QGroupBox {
+                font-weight: bold;
+                border: 1px solid #cccccc;
+                border-radius: 5px;
+                margin-top: 1ex;
+                padding-top: 10px;
+                background-color: #ffffff;
+            }
+            QGroupBox::title {
+                subcontrol-origin: margin;
+                subcontrol-position: top center;
+                padding: 0 5px;
+                background-color: #ffffff;
+            }
+            QPushButton {
+                background-color: #f0f0f0;
+                border: 1px solid #cccccc;
+                border-radius: 4px;
+                padding: 5px 10px;
+            }
+            QPushButton:hover {
+                background-color: #e0e0e0;
+                border: 1px solid #bbbbbb;
+            }
+            QPushButton:pressed {
+                background-color: #d0d0d0;
+            }
+            QPushButton:disabled {
+                background-color: #f8f8f8;
+                color: #aaaaaa;
+                border: 1px solid #dddddd;
+            }
+            QComboBox {
+                border: 1px solid #cccccc;
+                border-radius: 4px;
+                padding: 1px 18px 1px 3px;
+                min-width: 6em;
+                background-color: #ffffff;
+            }
+            QComboBox:hover {
+                border: 1px solid #bbbbbb;
+            }
+            QComboBox::drop-down {
+                subcontrol-origin: padding;
+                subcontrol-position: top right;
+                width: 15px;
+                border-left-width: 1px;
+                border-left-color: #cccccc;
+                border-left-style: solid;
+                border-top-right-radius: 3px;
+                border-bottom-right-radius: 3px;
+            }
+            QSplitter::handle {
+                background-color: #cccccc;
+            }
+            QSplitter::handle:horizontal {
+                width: 4px;
+            }
+            QSplitter::handle:vertical {
+                height: 4px;
+            }
+            QCheckBox {
+                spacing: 5px;
+            }
+            QCheckBox::indicator {
+                width: 18px;
+                height: 18px;
+            }
+        """)
+        
+    def setup_shortcuts(self):
+        """Set up keyboard shortcuts for the application."""
+        # File menu shortcuts
+        QShortcut(QKeySequence("Ctrl+N"), self, self.new_note)
+        QShortcut(QKeySequence("Ctrl+O"), self, self.load_note)
+        QShortcut(QKeySequence("Ctrl+S"), self, self.save_note)
+        QShortcut(QKeySequence("Ctrl+Q"), self, self.close)
+        
+        # Recording shortcuts
+        QShortcut(QKeySequence("F5"), self, self.start_recording)
+        QShortcut(QKeySequence("F6"), self, self.pause_recording)
+        QShortcut(QKeySequence("F7"), self, self.stop_recording)
+        QShortcut(QKeySequence("F8"), self, self.stop_and_transcribe)
+        QShortcut(QKeySequence("Ctrl+Shift+C"), self, self.clear_recording)
+        
+        # Transcription shortcuts
+        QShortcut(QKeySequence("Ctrl+T"), self, self.transcribe_audio)
+        
+        # Copy shortcuts
+        QShortcut(QKeySequence("Ctrl+Shift+R"), self, lambda: self.copy_text_to_clipboard(self.raw_text))
+        QShortcut(QKeySequence("Ctrl+Shift+C"), self, lambda: self.copy_text_to_clipboard(self.cleaned_text))
+        
+        # Device shortcut
+        QShortcut(QKeySequence("Ctrl+D"), self, self.save_default_device)
     
     def create_menu_bar(self):
         """Create the application menu bar."""
@@ -686,7 +862,7 @@ class WhisperNotepadApp(QMainWindow):
         file_menu.addAction(save_action)
         
         save_desktop_action = QAction("Save to Desktop", self)
-        save_desktop_action.setShortcut("Ctrl+D")
+        save_desktop_action.setShortcut("Ctrl+Shift+D")  # Changed from Ctrl+D to avoid conflict with device shortcut
         save_desktop_action.triggered.connect(self.save_note_to_desktop)
         file_menu.addAction(save_desktop_action)
         
@@ -715,7 +891,7 @@ class WhisperNotepadApp(QMainWindow):
         about_action = QAction("About", self)
         about_action.triggered.connect(self.show_about)
         help_menu.addAction(about_action)
-    
+        
     def load_audio_devices(self):
         """Load available audio input devices."""
         try:
@@ -782,69 +958,93 @@ class WhisperNotepadApp(QMainWindow):
         self.transcribe_button.setEnabled(False)
         self.clear_recording_button.setEnabled(False)
         self.statusBar().showMessage("Recording cleared", 3000)
-    
+        
+    def update_recording_time(self):
+        """Update the recording time display."""
+        self.recording_time += 1
+        minutes = self.recording_time // 60
+        seconds = self.recording_time % 60
+        self.time_display.setText(f"{minutes:02d}:{seconds:02d}")
+        
     def start_recording(self):
         """Start recording audio from the selected device."""
-        try:
-            # Get selected device
-            device_idx = self.device_combo.currentData()
-            
-            # Create and start recording thread
-            self.recording_thread = RecordingThread(device_idx)
-            self.recording_thread.finished.connect(self.on_recording_finished)
-            self.recording_thread.error.connect(self.show_error)
-            
-            # Update UI
-            self.record_button.setEnabled(False)
-            self.pause_button.setEnabled(True)
-            self.stop_button.setEnabled(True)
-            self.stop_and_transcribe_button.setEnabled(True)
-            self.clear_recording_button.setEnabled(False)
-            self.transcribe_button.setEnabled(False)
-            self.device_combo.setEnabled(False)
-            self.statusBar().showMessage("Recording started")
-            
-            # Start a timer to show recording duration
-            self.recording_start_time = time.time()
-            self.recording_timer = QTimer(self)
-            self.recording_timer.timeout.connect(self.update_recording_time)
-            self.recording_timer.start(1000)  # Update every second
-            
-            # Start recording
-            self.recording_thread.start_recording()
-        except Exception as e:
-            self.show_error(f"Error starting recording: {str(e)}")
-    
-    def update_recording_time(self):
-        """Update the status bar with the current recording duration."""
-        duration = int(time.time() - self.recording_start_time)
-        minutes, seconds = divmod(duration, 60)
-        self.statusBar().showMessage(f"Recording... {minutes:02d}:{seconds:02d}")
-    
+        if not self.recording_thread:
+            try:
+                # Get selected device
+                device_id = self.device_combo.currentData()
+                
+                if device_id is None:
+                    self.show_error("No audio device selected")
+                    return
+                
+                # Create recording thread
+                self.recording_thread = RecordingThread(device_id)
+                
+                # Connect signals
+                self.recording_thread.error.connect(self.show_error)
+                self.recording_thread.finished.connect(self.on_recording_finished)
+                
+                # Start recording
+                self.recording_thread.start_recording()
+                
+                # Update UI
+                self.record_button.setEnabled(False)
+                self.pause_button.setEnabled(True)
+                self.stop_button.setEnabled(True)
+                self.stop_and_transcribe_button.setEnabled(True)
+                self.clear_recording_button.setEnabled(False)
+                self.transcribe_button.setEnabled(False)
+                self.device_combo.setEnabled(False)
+                self.save_default_device_button.setEnabled(False)
+                
+                # Set recording flag
+                self.is_recording = True
+                self.is_paused = False
+                
+                # Start timer
+                self.recording_time = 0
+                self.recording_timer.start(1000)  # Update every second
+                
+                # Update status
+                self.statusBar().showMessage("Recording...")
+            except Exception as e:
+                self.show_error(f"Error starting recording: {str(e)}")
+                self.recording_thread = None
+                
     def pause_recording(self):
-        """Pause the current recording."""
-        if self.recording_thread and hasattr(self.recording_thread, 'recording') and self.recording_thread.recording:
-            if self.recording_thread.paused:
-                # Resume recording
-                self.recording_thread.resume_recording()
-                self.pause_button.setText("Pause")
-                self.statusBar().showMessage("Recording resumed")
-            else:
+        """Pause or resume the current recording."""
+        if self.recording_thread:
+            if not self.is_paused:
                 # Pause recording
                 self.recording_thread.pause_recording()
-                self.pause_button.setText("Resume")
+                self.is_paused = True
+                self.pause_button.setText("▶")
+                self.pause_button.setToolTip("Resume Recording (F6)")
                 self.statusBar().showMessage("Recording paused")
-    
+                
+                # Pause timer
+                self.recording_timer.stop()
+            else:
+                # Resume recording
+                self.recording_thread.resume_recording()
+                self.is_paused = False
+                self.pause_button.setText("⏸")
+                self.pause_button.setToolTip("Pause Recording (F6)")
+                self.statusBar().showMessage("Recording resumed")
+                
+                # Resume timer
+                self.recording_timer.start(1000)
+                
     def stop_recording(self):
         """Stop the current recording."""
-        if self.recording_thread and hasattr(self.recording_thread, 'recording') and self.recording_thread.recording:
+        if self.recording_thread:
             self.recording_timer.stop()
             self.recording_thread.stop_recording()
             self.statusBar().showMessage("Recording stopped")
-    
+            
     def stop_and_transcribe(self):
         """Stop the current recording and immediately start transcription."""
-        if self.recording_thread and hasattr(self.recording_thread, 'recording') and self.recording_thread.recording:
+        if self.recording_thread:
             # First stop the recording
             self.recording_timer.stop()
             self.recording_thread.stop_recording()
@@ -852,7 +1052,7 @@ class WhisperNotepadApp(QMainWindow):
             
             # Wait a moment for the recording to be saved
             QTimer.singleShot(500, self.transcribe_audio)
-    
+            
     def on_recording_finished(self):
         """Handle the completion of the recording process."""
         try:
@@ -868,6 +1068,7 @@ class WhisperNotepadApp(QMainWindow):
                 self.clear_recording_button.setEnabled(True)
                 self.transcribe_button.setEnabled(True)
                 self.device_combo.setEnabled(True)
+                self.save_default_device_button.setEnabled(True)
                 
                 # Stop and clear the timer
                 if hasattr(self, 'recording_timer'):
@@ -884,7 +1085,7 @@ class WhisperNotepadApp(QMainWindow):
             self.recording_thread = None
         except Exception as e:
             self.show_error(f"Error finalizing recording: {str(e)}")
-    
+            
     def transcribe_audio(self):
         """Transcribe the recorded audio."""
         if not self.temp_audio_file:
@@ -935,7 +1136,7 @@ class WhisperNotepadApp(QMainWindow):
                 self.statusBar().showMessage("Transcription complete.")
         except Exception as e:
             self.show_error(f"Error processing transcription: {str(e)}")
-    
+            
     def cleanup_text(self, text):
         """Clean up the transcript using GPT."""
         if not text:
@@ -951,7 +1152,7 @@ class WhisperNotepadApp(QMainWindow):
         
         # Start cleanup in a new thread
         threading.Thread(target=self.cleanup_thread.cleanup).start()
-    
+        
     def on_cleanup_finished(self, text):
         """Handle the completion of the GPT cleanup process."""
         # Update UI with cleaned text
@@ -966,20 +1167,20 @@ class WhisperNotepadApp(QMainWindow):
                 self.temp_audio_file = None
             except Exception as e:
                 print(f"Error removing temporary file: {str(e)}")
-    
+                
     def new_note(self):
         """Clear both transcription text areas."""
         self.raw_text.clear()
         self.cleaned_text.clear()
         self.statusBar().showMessage("New note created")
-    
+        
     def save_note(self):
         """Save the content of the cleaned transcription to a file."""
         text = self.cleaned_text.toPlainText()
         if not text:
             self.show_error("Nothing to save")
             return
-        
+            
         try:
             file_path, _ = QFileDialog.getSaveFileName(
                 self, "Save Note", "", "Text Files (*.txt);;All Files (*)"
@@ -991,14 +1192,14 @@ class WhisperNotepadApp(QMainWindow):
                 self.statusBar().showMessage(f"Note saved to {file_path}")
         except Exception as e:
             self.show_error(f"Error saving note: {str(e)}")
-    
+            
     def save_note_to_desktop(self):
         """Save the content of the cleaned transcription to the desktop."""
         text = self.cleaned_text.toPlainText()
         if not text:
             self.show_error("Nothing to save")
             return
-        
+            
         try:
             # Get desktop path
             desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
@@ -1012,7 +1213,7 @@ class WhisperNotepadApp(QMainWindow):
             self.statusBar().showMessage(f"Note saved to {file_path}")
         except Exception as e:
             self.show_error(f"Error saving note to desktop: {str(e)}")
-    
+            
     def load_note(self):
         """Load the content of a file into the cleaned transcription area."""
         try:
@@ -1027,7 +1228,7 @@ class WhisperNotepadApp(QMainWindow):
                 self.statusBar().showMessage(f"Note loaded from {file_path}")
         except Exception as e:
             self.show_error(f"Error loading note: {str(e)}")
-    
+            
     def copy_text_to_clipboard(self, text_area):
         """Copy the text from the given text area to the clipboard."""
         text = text_area.toPlainText()
@@ -1037,7 +1238,7 @@ class WhisperNotepadApp(QMainWindow):
             self.statusBar().showMessage("Copied to clipboard", 3000)
         else:
             self.statusBar().showMessage("Nothing to copy", 3000)
-    
+            
     def set_api_key(self):
         """Set the OpenAI API Key."""
         from PySide6.QtWidgets import QInputDialog, QLineEdit, QMessageBox
@@ -1068,7 +1269,7 @@ class WhisperNotepadApp(QMainWindow):
                 "Your OpenAI API key has been updated successfully. You can now use the transcription and cleanup features."
             )
             self.statusBar().showMessage("API key updated successfully", 3000)
-    
+            
     def show_about(self):
         """Show the about dialog."""
         QMessageBox.about(
@@ -1078,11 +1279,11 @@ class WhisperNotepadApp(QMainWindow):
             "and optionally cleaning it up with GPT.</p>"
             "<p>Created by Daniel Rosehill</p>"
         )
-    
+        
     def show_error(self, message):
         """Show an error message dialog."""
         QMessageBox.critical(self, "Error", message)
-    
+        
     def load_config(self):
         """Load configuration from file or create default."""
         try:
@@ -1102,7 +1303,7 @@ class WhisperNotepadApp(QMainWindow):
                 "default_device": None,
                 "default_device_id": None
             }
-    
+            
     def save_config(self):
         """Save configuration to file."""
         try:
@@ -1110,7 +1311,7 @@ class WhisperNotepadApp(QMainWindow):
                 json.dump(self.config, f)
         except Exception as e:
             print(f"Error saving config: {e}")
-    
+            
     def closeEvent(self, event):
         """Handle application close event."""
         # Save config
@@ -1129,6 +1330,10 @@ class WhisperNotepadApp(QMainWindow):
 def main():
     """Main application entry point."""
     app = QApplication(sys.argv)
+    
+    # Set application style
+    app.setStyle("Fusion")
+    
     window = WhisperNotepadApp()
     window.show()
     sys.exit(app.exec())
