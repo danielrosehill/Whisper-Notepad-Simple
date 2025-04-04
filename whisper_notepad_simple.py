@@ -546,6 +546,13 @@ class WhisperNotepadApp(QMainWindow):
         self.stop_button.setEnabled(False)
         self.stop_button.setFixedWidth(40)
         
+        # Stop & Transcribe button
+        self.stop_and_transcribe_button = QPushButton("⏹→")
+        self.stop_and_transcribe_button.setToolTip("Stop Recording & Transcribe")
+        self.stop_and_transcribe_button.clicked.connect(self.stop_and_transcribe)
+        self.stop_and_transcribe_button.setEnabled(False)
+        self.stop_and_transcribe_button.setFixedWidth(60)
+        
         # Clear recording button
         self.clear_recording_button = QPushButton("🗑")
         self.clear_recording_button.setToolTip("Clear Recording")
@@ -556,6 +563,7 @@ class WhisperNotepadApp(QMainWindow):
         recording_layout.addWidget(self.record_button)
         recording_layout.addWidget(self.pause_button)
         recording_layout.addWidget(self.stop_button)
+        recording_layout.addWidget(self.stop_and_transcribe_button)
         recording_layout.addWidget(self.clear_recording_button)
         top_layout.addWidget(recording_group)
         
@@ -790,17 +798,20 @@ class WhisperNotepadApp(QMainWindow):
             self.record_button.setEnabled(False)
             self.pause_button.setEnabled(True)
             self.stop_button.setEnabled(True)
+            self.stop_and_transcribe_button.setEnabled(True)
             self.clear_recording_button.setEnabled(False)
-            self.statusBar().showMessage("Recording...")
-            
-            # Start recording
-            self.recording_thread.start_recording()
+            self.transcribe_button.setEnabled(False)
+            self.device_combo.setEnabled(False)
+            self.statusBar().showMessage("Recording started")
             
             # Start a timer to show recording duration
             self.recording_start_time = time.time()
             self.recording_timer = QTimer(self)
             self.recording_timer.timeout.connect(self.update_recording_time)
             self.recording_timer.start(1000)  # Update every second
+            
+            # Start recording
+            self.recording_thread.start_recording()
         except Exception as e:
             self.show_error(f"Error starting recording: {str(e)}")
     
@@ -831,6 +842,17 @@ class WhisperNotepadApp(QMainWindow):
             self.recording_thread.stop_recording()
             self.statusBar().showMessage("Recording stopped")
     
+    def stop_and_transcribe(self):
+        """Stop the current recording and immediately start transcription."""
+        if self.recording_thread and hasattr(self.recording_thread, 'recording') and self.recording_thread.recording:
+            # First stop the recording
+            self.recording_timer.stop()
+            self.recording_thread.stop_recording()
+            self.statusBar().showMessage("Recording stopped, starting transcription...")
+            
+            # Wait a moment for the recording to be saved
+            QTimer.singleShot(500, self.transcribe_audio)
+    
     def on_recording_finished(self):
         """Handle the completion of the recording process."""
         try:
@@ -842,8 +864,10 @@ class WhisperNotepadApp(QMainWindow):
                 self.record_button.setEnabled(True)
                 self.pause_button.setEnabled(False)
                 self.stop_button.setEnabled(False)
-                self.transcribe_button.setEnabled(True)
+                self.stop_and_transcribe_button.setEnabled(False)
                 self.clear_recording_button.setEnabled(True)
+                self.transcribe_button.setEnabled(True)
+                self.device_combo.setEnabled(True)
                 
                 # Stop and clear the timer
                 if hasattr(self, 'recording_timer'):

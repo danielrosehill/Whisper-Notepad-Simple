@@ -52,8 +52,10 @@
    - **Record**: Start recording audio
    - **Pause/Resume**: Pause or resume the current recording
    - **Stop**: Stop recording and prepare for transcription
+   - **Stop & Transcribe**: Stop recording and immediately start transcription (combines two steps into one)
+   - **Clear**: Clear the current recording
 
-4. Click **Transcribe** to process your recording with Whisper API
+4. Click **Transcribe** to process your recording with Whisper API (or use the Stop & Transcribe button to do both steps at once)
 
 5. Toggle the **Apply Text Cleanup** checkbox to control whether GPT cleanup is applied to your transcription
 
