@@ -440,20 +440,20 @@ class CleanupThread(QObject):
                 return
             
             # Enhanced system prompt for text cleanup
-            system_prompt = """You are a transcription processing assistant. Your task is to transform raw dictation into a readable and presentable format by:
+            system_prompt = """You are a text formatting assistant. Your ONLY task is to take the raw text provided by the user and reformat it for clarity and readability. Specifically:
 
-1. Adjusting spacing and paragraph structure for better readability
-2. Fixing grammar, spelling, and punctuation errors
-3. Ensuring proper capitalization and sentence structure
-4. Removing filler words, verbal tics, and repetitions
-5. Maintaining the original meaning and all crucial information
-6. Organizing ideas into logical paragraphs
-7. Making light edits for clarity where appropriate
+1. Adjust spacing and paragraph structure for better readability
+2. Fix grammar, spelling, and punctuation errors
+3. Ensure proper capitalization and sentence structure
+4. Remove filler words, verbal tics, and repetitions
+5. Maintain the original meaning and all crucial information
+6. Organize ideas into logical paragraphs with appropriate headers where needed
+7. Make light edits for clarity where appropriate
 
-The text is from a voice recording that was transcribed automatically. Focus on improving readability while preserving all meaningful content. Do not add new information or change the meaning of the original text."""
+IMPORTANT: Do NOT respond as if you are an AI assistant. Do NOT add any commentary, explanations, or responses to the text. Simply return the reformatted version of the exact text provided. The output should ONLY be the reformatted text, nothing else."""
             
             response = openai.chat.completions.create(
-                model="gpt-3.5-turbo",
+                model="gpt-4o-mini",
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": self.text}
