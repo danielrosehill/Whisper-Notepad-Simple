@@ -39,6 +39,22 @@ from PySide6.QtGui import QIcon, QFont, QAction, QClipboard, QPalette, QColor, Q
 APP_NAME = "Whisper Notepad Simple"
 CONFIG_FILE = os.path.expanduser("~/.whisper_notepad_simple_config.json")
 
+# Text transformation styles
+TEXT_TRANSFORMATIONS = {
+    "Standard": "You are a text formatting assistant. Your ONLY task is to take the raw text provided by the user and reformat it for clarity and readability. Specifically:\n\n1. Adjust spacing and paragraph structure for better readability\n2. Fix grammar, spelling, and punctuation errors\n3. Ensure proper capitalization and sentence structure\n4. Remove filler words, verbal tics, and repetitions\n5. Maintain the original meaning and all crucial information\n6. Organize ideas into logical paragraphs with appropriate headers where needed\n7. Make light edits for clarity where appropriate\n\nIMPORTANT: Do NOT respond as if you are an AI assistant. Do NOT add any commentary, explanations, or responses to the text. Simply return the reformatted version of the exact text provided. The output should ONLY be the reformatted text, nothing else.",
+    
+    "Email Format": "You are a text formatting assistant. Your ONLY task is to take the raw text provided by the user and reformat it into a professional email format. Specifically:\n\n1. Create a proper email structure with greeting and sign-off\n2. Organize content into clear paragraphs\n3. Fix grammar, spelling, and punctuation errors\n4. Remove filler words and verbal tics\n5. Maintain a professional tone throughout\n6. Keep the original meaning and all crucial information\n7. Add appropriate subject line if context allows\n\nIMPORTANT: Do NOT respond as if you are an AI assistant. Do NOT add any commentary, explanations, or responses to the text. Simply return the reformatted version as a professional email. The output should ONLY be the reformatted email text, nothing else.",
+    
+    "Voice Prompt": "You are a text formatting assistant. Your ONLY task is to take the raw text provided by the user and reformat it into a clear, concise voice prompt suitable for AI voice assistants. Specifically:\n\n1. Make the text direct, clear, and conversational\n2. Remove unnecessary words and phrases\n3. Fix grammar and structure for natural speech patterns\n4. Format as a direct instruction or query\n5. Maintain the original intent and all crucial information\n6. Optimize for voice recognition systems\n\nIMPORTANT: Do NOT respond as if you are an AI assistant. Do NOT add any commentary, explanations, or responses to the text. Simply return the reformatted version as a voice prompt. The output should ONLY be the reformatted voice prompt, nothing else.",
+    
+    "System Prompt": "You are a text formatting assistant. Your ONLY task is to take the raw text provided by the user and reformat it into a well-structured system prompt for AI systems. Specifically:\n\n1. Format as clear instructions for an AI system\n2. Organize into logical sections with appropriate structure\n3. Use clear, unambiguous language\n4. Include specific guidelines and constraints\n5. Define the AI's role and boundaries\n6. Maintain all crucial information from the original text\n7. Format with appropriate markdown or structure if needed\n\nIMPORTANT: Do NOT respond as if you are an AI assistant. Do NOT add any commentary, explanations, or responses to the text. Simply return the reformatted version as a system prompt. The output should ONLY be the reformatted system prompt, nothing else.",
+    
+    "Personal Email": "You are a text formatting assistant. Your ONLY task is to take the raw text provided by the user and reformat it into a friendly, personal email. Specifically:\n\n1. Create a warm, conversational tone\n2. Include appropriate casual greeting and sign-off\n3. Organize content into natural-sounding paragraphs\n4. Fix grammar, spelling, and punctuation errors\n5. Remove filler words and verbal tics\n6. Maintain the original meaning and all crucial information\n\nIMPORTANT: Do NOT respond as if you are an AI assistant. Do NOT add any commentary, explanations, or responses to the text. Simply return the reformatted version as a personal email. The output should ONLY be the reformatted email text, nothing else.",
+    
+    "Technical Documentation": "You are a text formatting assistant. Your ONLY task is to take the raw text provided by the user and reformat it into clear technical documentation. Specifically:\n\n1. Use proper technical writing style and structure\n2. Organize with appropriate headings and subheadings\n3. Use precise, unambiguous language\n4. Format code snippets, parameters, or technical terms appropriately\n5. Fix grammar, spelling, and punctuation errors\n6. Create logical flow with appropriate transitions\n7. Maintain all technical details and crucial information\n\nIMPORTANT: Do NOT respond as if you are an AI assistant. Do NOT add any commentary, explanations, or responses to the text. Simply return the reformatted version as technical documentation. The output should ONLY be the reformatted technical documentation, nothing else.",
+    
+    "Shakespearean Style": "You are a text formatting assistant. Your ONLY task is to take the raw text provided by the user and reformat it in the style of William Shakespeare. Specifically:\n\n1. Use Early Modern English vocabulary and grammar\n2. Incorporate Shakespearean phrases, metaphors, and expressions\n3. Structure with appropriate rhythm and flow\n4. Maintain the original meaning and all crucial information\n5. Use poetic devices where appropriate\n6. Include Shakespearean-style greetings and closings if relevant\n\nIMPORTANT: Do NOT respond as if you are an AI assistant. Do NOT add any commentary, explanations, or responses to the text. Simply return the reformatted version in Shakespearean style. The output should ONLY be the reformatted text, nothing else."
+}
 
 class RecordingThread(QObject):
     """Thread for handling audio recording to avoid UI freezing."""
@@ -422,9 +438,10 @@ class CleanupThread(QObject):
     finished = Signal(str)
     error = Signal(str)
     
-    def __init__(self, text):
+    def __init__(self, text, transformation_style="Standard"):
         super().__init__()
         self.text = text
+        self.transformation_style = transformation_style
         
     def cleanup(self):
         """Clean up the transcription using OpenAI's GPT API."""
@@ -439,18 +456,8 @@ class CleanupThread(QObject):
                 self.error.emit("No text to clean up.")
                 return
             
-            # Enhanced system prompt for text cleanup
-            system_prompt = """You are a text formatting assistant. Your ONLY task is to take the raw text provided by the user and reformat it for clarity and readability. Specifically:
-
-1. Adjust spacing and paragraph structure for better readability
-2. Fix grammar, spelling, and punctuation errors
-3. Ensure proper capitalization and sentence structure
-4. Remove filler words, verbal tics, and repetitions
-5. Maintain the original meaning and all crucial information
-6. Organize ideas into logical paragraphs with appropriate headers where needed
-7. Make light edits for clarity where appropriate
-
-IMPORTANT: Do NOT respond as if you are an AI assistant. Do NOT add any commentary, explanations, or responses to the text. Simply return the reformatted version of the exact text provided. The output should ONLY be the reformatted text, nothing else."""
+            # Get the appropriate system prompt based on transformation style
+            system_prompt = TEXT_TRANSFORMATIONS.get(self.transformation_style, TEXT_TRANSFORMATIONS["Standard"])
             
             response = openai.chat.completions.create(
                 model="gpt-4o-mini",
@@ -613,10 +620,37 @@ class WhisperNotepadApp(QMainWindow):
         process_layout = QVBoxLayout(process_group)
         
         # Add checkbox for text cleanup
-        self.cleanup_checkbox = QCheckBox("Process Transcription")
+        self.cleanup_checkbox = QCheckBox("Process Transcription with GPT")
         self.cleanup_checkbox.setChecked(True)
         self.cleanup_checkbox.setToolTip("Apply AI-powered text processing to improve readability")
         process_layout.addWidget(self.cleanup_checkbox)
+        
+        # Add transformation style selector
+        transformation_layout = QHBoxLayout()
+        transformation_label = QLabel("Transformation Style:")
+        self.transformation_combo = QComboBox()
+        for style in TEXT_TRANSFORMATIONS.keys():
+            self.transformation_combo.addItem(style)
+        
+        # Set default transformation style from config
+        default_style = self.config.get("default_transformation", "Standard")
+        if default_style in TEXT_TRANSFORMATIONS:
+            self.transformation_combo.setCurrentText(default_style)
+            
+        self.transformation_combo.setToolTip("Select the style of text transformation to apply")
+        self.transformation_combo.setEnabled(True)
+        transformation_layout.addWidget(transformation_label)
+        transformation_layout.addWidget(self.transformation_combo)
+        process_layout.addLayout(transformation_layout)
+        
+        # Connect cleanup checkbox to enable/disable transformation combo
+        self.cleanup_checkbox.toggled.connect(self.transformation_combo.setEnabled)
+        
+        # Add checkbox for auto-transcribe
+        self.auto_transcribe_checkbox = QCheckBox("Auto-Transcribe After Recording")
+        self.auto_transcribe_checkbox.setChecked(False)
+        self.auto_transcribe_checkbox.setToolTip("Automatically transcribe audio after stopping recording")
+        process_layout.addWidget(self.auto_transcribe_checkbox)
         
         # Transcribe button
         button_layout = QHBoxLayout()
@@ -1051,8 +1085,13 @@ class WhisperNotepadApp(QMainWindow):
             self.statusBar().showMessage("Recording stopped, starting transcription...")
             
             # Wait a moment for the recording to be saved
-            QTimer.singleShot(500, self.transcribe_audio)
-            
+            QTimer.singleShot(500, self.check_and_transcribe)
+    
+    def check_and_transcribe(self):
+        """Check if we should transcribe and start transcription if needed."""
+        if self.temp_audio_file:
+            self.transcribe_audio()
+    
     def on_recording_finished(self):
         """Handle the completion of the recording process."""
         try:
@@ -1074,7 +1113,12 @@ class WhisperNotepadApp(QMainWindow):
                 if hasattr(self, 'recording_timer'):
                     self.recording_timer.stop()
                 
-                self.statusBar().showMessage("Recording finished. Ready to transcribe.")
+                # Auto-transcribe if enabled
+                if self.auto_transcribe_checkbox.isChecked():
+                    self.statusBar().showMessage("Recording finished. Auto-transcribing...")
+                    QTimer.singleShot(500, self.transcribe_audio)
+                else:
+                    self.statusBar().showMessage("Recording finished. Ready to transcribe.")
             else:
                 self.record_button.setEnabled(True)
                 self.pause_button.setEnabled(False)
@@ -1142,17 +1186,19 @@ class WhisperNotepadApp(QMainWindow):
         if not text:
             self.show_error("No text to clean up")
             return
-            
-        self.statusBar().showMessage("Cleaning up transcription with GPT...")
+        
+        # Get the selected transformation style
+        transformation_style = self.transformation_combo.currentText()
+        self.statusBar().showMessage(f"Cleaning up transcription with GPT using {transformation_style} style...")
         
         # Start GPT cleanup
-        self.cleanup_thread = CleanupThread(text)
+        self.cleanup_thread = CleanupThread(text, transformation_style)
         self.cleanup_thread.finished.connect(self.on_cleanup_finished)
         self.cleanup_thread.error.connect(self.show_error)
         
         # Start cleanup in a new thread
         threading.Thread(target=self.cleanup_thread.cleanup).start()
-        
+
     def on_cleanup_finished(self, text):
         """Handle the completion of the GPT cleanup process."""
         # Update UI with cleaned text
@@ -1294,24 +1340,29 @@ class WhisperNotepadApp(QMainWindow):
                 self.config = {
                     "api_key": os.environ.get("OPENAI_API_KEY", ""),
                     "default_device": None,
-                    "default_device_id": None
+                    "default_device_id": None,
+                    "default_transformation": "Standard"
                 }
         except Exception as e:
             print(f"Error loading config: {e}")
             self.config = {
                 "api_key": os.environ.get("OPENAI_API_KEY", ""),
                 "default_device": None,
-                "default_device_id": None
+                "default_device_id": None,
+                "default_transformation": "Standard"
             }
             
     def save_config(self):
         """Save configuration to file."""
         try:
+            # Save the current transformation style
+            self.config["default_transformation"] = self.transformation_combo.currentText()
+            
             with open(CONFIG_FILE, "w") as f:
                 json.dump(self.config, f)
         except Exception as e:
             print(f"Error saving config: {e}")
-            
+
     def closeEvent(self, event):
         """Handle application close event."""
         # Save config
