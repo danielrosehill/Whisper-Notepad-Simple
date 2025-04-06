@@ -15,6 +15,7 @@ echo "Building executable..."
 pyinstaller --name="WhisperNotepadSimple" \
             --onefile \
             --windowed \
+            --add-data="system-prompts:system-prompts" \
             whisper_notepad_simple.py
 
 echo "Build complete! Executable is in the 'dist' directory."

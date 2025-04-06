@@ -5,7 +5,7 @@ a = Analysis(
     ['whisper_notepad_simple.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('system-prompts', 'system-prompts')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
