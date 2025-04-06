@@ -30,7 +30,9 @@ import openai
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QPushButton, QTextEdit, QComboBox,
     QVBoxLayout, QHBoxLayout, QLabel, QFileDialog, QMessageBox, QGroupBox,
-    QCheckBox, QSplitter, QFrame, QToolButton, QProgressBar, QStyle
+    QCheckBox, QSplitter, QFrame, QToolButton, QProgressBar, QStyle,
+    QDialog, QListWidget, QListWidgetItem, QTabWidget, QScrollArea, QPushButton,
+    QLineEdit
 )
 from PySide6.QtCore import Qt, QSettings, QTimer, Signal, QObject, Slot
 from PySide6.QtGui import QIcon, QFont, QAction, QClipboard, QPalette, QColor, QKeySequence, QShortcut, QPainter, QPixmap
@@ -38,6 +40,7 @@ from PySide6.QtGui import QIcon, QFont, QAction, QClipboard, QPalette, QColor, Q
 # Constants
 APP_NAME = "Whisper Notepad Simple"
 CONFIG_FILE = os.path.expanduser("~/.whisper_notepad_simple_config.json")
+SYS_PROMPT_LIBRARY_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "system-prompts", "sys-prompt-library.json")
 
 # Text transformation styles
 TEXT_TRANSFORMATIONS = {
@@ -478,6 +481,176 @@ class CleanupThread(QObject):
             self.error.emit(f"Error during GPT cleanup: {str(e)}")
 
 
+class SystemPromptDialog(QDialog):
+    """Dialog for selecting system prompts from the library."""
+    
+    def __init__(self, parent=None, current_transformations=None):
+        super().__init__(parent)
+        self.setWindowTitle("System Prompt Library")
+        self.setMinimumSize(700, 500)
+        self.current_transformations = current_transformations or {}
+        self.selected_prompt = None
+        self.all_prompts = []  # Store all prompts for searching
+        self.init_ui()
+        
+    def init_ui(self):
+        """Initialize the dialog UI."""
+        layout = QVBoxLayout(self)
+        
+        # Add search box
+        search_layout = QHBoxLayout()
+        search_label = QLabel("Search:")
+        self.search_box = QLineEdit()
+        self.search_box.setPlaceholderText("Type to search prompts...")
+        self.search_box.textChanged.connect(self.filter_prompts)
+        search_layout.addWidget(search_label)
+        search_layout.addWidget(self.search_box)
+        layout.addLayout(search_layout)
+        
+        # Create list widget for prompts
+        self.list_widget = QListWidget()
+        self.list_widget.setAlternatingRowColors(True)
+        self.list_widget.itemClicked.connect(self.on_item_selected)
+        
+        # Load prompts from library
+        self.load_prompts()
+        
+        # Add list widget to layout
+        layout.addWidget(self.list_widget)
+        
+        # Add buttons
+        button_layout = QHBoxLayout()
+        self.cancel_button = QPushButton("Cancel")
+        self.cancel_button.clicked.connect(self.reject)
+        self.select_button = QPushButton("Select")
+        self.select_button.clicked.connect(self.accept_selection)
+        self.select_button.setEnabled(False)
+        
+        button_layout.addWidget(self.cancel_button)
+        button_layout.addWidget(self.select_button)
+        layout.addLayout(button_layout)
+        
+    def load_prompts(self):
+        """Load prompts from the system prompt library file."""
+        try:
+            # Check if library file exists
+            if not os.path.exists(SYS_PROMPT_LIBRARY_FILE):
+                QMessageBox.warning(self, "Error", f"System prompt library file not found: {SYS_PROMPT_LIBRARY_FILE}")
+                return
+                
+            # Load prompts from file
+            with open(SYS_PROMPT_LIBRARY_FILE, "r") as f:
+                prompts = json.load(f)
+                
+            # Define categories for grouping
+            categories = {
+                "Document Formats": ["readme", "guide", "how-to", "document", "documentation", "article", "report"],
+                "Email & Communication": ["email", "whatsapp", "message", "reply"],
+                "Summarization": ["summary", "extract", "bullet", "executive", "bottom line"],
+                "Conversion": ["convert", "csv", "json", "sql"],
+                "Style & Tone": ["formal", "informal", "tone", "slang", "old english", "shakespeare", "hipster", "jargon"],
+                "Business": ["business", "proposal", "budget", "time sheet", "job", "cover letter", "approval"],
+                "Creative": ["poetry", "creative", "prose", "dialogue"],
+            }
+            
+            # Process prompts and categorize them
+            categorized_prompts = []
+            
+            for key, prompt in prompts.items():
+                name = prompt.get("name", "")
+                description = prompt.get("description", "")
+                prompt_text = prompt.get("prompt", "")
+                
+                # Skip if already in current transformations
+                if name in self.current_transformations:
+                    continue
+                
+                # Determine category
+                category = "Miscellaneous"
+                for cat_name, keywords in categories.items():
+                    if any(keyword in name.lower() or keyword in description.lower() for keyword in keywords):
+                        category = cat_name
+                        break
+                
+                # Add to categorized prompts
+                categorized_prompts.append((category, key, name, description, prompt_text))
+                
+            # Sort by category and then by name
+            categorized_prompts.sort(key=lambda x: (x[0], x[2]))
+            
+            # Store all prompts for searching
+            self.all_prompts = categorized_prompts
+            
+            # Add prompts to list widget
+            self.populate_list_widget(categorized_prompts)
+                
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Error loading system prompts: {str(e)}")
+    
+    def populate_list_widget(self, prompts):
+        """Populate the list widget with the given prompts."""
+        self.list_widget.clear()
+        
+        current_category = None
+        
+        for category, key, name, description, prompt_text in prompts:
+            # Add category header if it's a new category
+            if category != current_category:
+                category_item = QListWidgetItem(f"--- {category} ---")
+                category_item.setFlags(Qt.ItemIsEnabled)  # Make it non-selectable
+                category_item.setBackground(QColor(230, 230, 230))  # Light gray background
+                category_item.setForeground(QColor(0, 0, 0))  # Black text
+                font = category_item.font()
+                font.setBold(True)
+                category_item.setFont(font)
+                self.list_widget.addItem(category_item)
+                current_category = category
+            
+            # Add prompt item
+            item = QListWidgetItem(f"  {name}")
+            item.setToolTip(description)
+            item.setData(Qt.UserRole, (key, name, prompt_text))
+            self.list_widget.addItem(item)
+    
+    def filter_prompts(self):
+        """Filter prompts based on search text."""
+        search_text = self.search_box.text().lower()
+        
+        if not search_text:
+            # If no search text, show all prompts
+            self.populate_list_widget(self.all_prompts)
+            return
+        
+        # Filter prompts that match the search text
+        filtered_prompts = []
+        for category, key, name, description, prompt_text in self.all_prompts:
+            if (search_text in name.lower() or 
+                search_text in description.lower() or 
+                search_text in category.lower()):
+                filtered_prompts.append((category, key, name, description, prompt_text))
+        
+        # Update the list widget with filtered prompts
+        self.populate_list_widget(filtered_prompts)
+    
+    def on_item_selected(self, item):
+        """Handle item selection."""
+        data = item.data(Qt.UserRole)
+        if data:
+            self.selected_prompt = data
+            self.select_button.setEnabled(True)
+        else:
+            # If a category header is selected, disable the select button
+            self.select_button.setEnabled(False)
+    
+    def accept_selection(self):
+        """Accept the selected prompt."""
+        if self.selected_prompt:
+            self.accept()
+    
+    def get_selected_prompt(self):
+        """Get the selected prompt."""
+        return self.selected_prompt
+
 class WhisperNotepadApp(QMainWindow):
     """Main application window for Whisper Notepad Simple."""
     
@@ -639,8 +812,15 @@ class WhisperNotepadApp(QMainWindow):
             
         self.transformation_combo.setToolTip("Select the style of text transformation to apply")
         self.transformation_combo.setEnabled(True)
+        
+        # Add button to browse system prompts
+        self.browse_prompts_button = QPushButton("Browse Prompts...")
+        self.browse_prompts_button.setToolTip("Browse and select from the system prompt library")
+        self.browse_prompts_button.clicked.connect(self.browse_system_prompts)
+        
         transformation_layout.addWidget(transformation_label)
         transformation_layout.addWidget(self.transformation_combo)
+        transformation_layout.addWidget(self.browse_prompts_button)
         process_layout.addLayout(transformation_layout)
         
         # Connect cleanup checkbox to enable/disable transformation combo
@@ -1336,12 +1516,19 @@ class WhisperNotepadApp(QMainWindow):
             if os.path.exists(CONFIG_FILE):
                 with open(CONFIG_FILE, "r") as f:
                     self.config = json.load(f)
+                    
+                    # Load custom transformations if present
+                    if "custom_transformations" in self.config:
+                        for name, prompt in self.config["custom_transformations"].items():
+                            if name not in TEXT_TRANSFORMATIONS:
+                                TEXT_TRANSFORMATIONS[name] = prompt
             else:
                 self.config = {
                     "api_key": os.environ.get("OPENAI_API_KEY", ""),
                     "default_device": None,
                     "default_device_id": None,
-                    "default_transformation": "Standard"
+                    "default_transformation": "Standard",
+                    "custom_transformations": {}
                 }
         except Exception as e:
             print(f"Error loading config: {e}")
@@ -1349,7 +1536,8 @@ class WhisperNotepadApp(QMainWindow):
                 "api_key": os.environ.get("OPENAI_API_KEY", ""),
                 "default_device": None,
                 "default_device_id": None,
-                "default_transformation": "Standard"
+                "default_transformation": "Standard",
+                "custom_transformations": {}
             }
             
     def save_config(self):
@@ -1358,10 +1546,48 @@ class WhisperNotepadApp(QMainWindow):
             # Save the current transformation style
             self.config["default_transformation"] = self.transformation_combo.currentText()
             
+            # Save custom transformations
+            custom_transformations = {}
+            for name, prompt in TEXT_TRANSFORMATIONS.items():
+                # Skip default transformations
+                if name not in ["Standard", "Email Format", "Voice Prompt", "System Prompt", 
+                               "Personal Email", "Technical Documentation", "Shakespearean Style"]:
+                    custom_transformations[name] = prompt
+                    
+            self.config["custom_transformations"] = custom_transformations
+            
             with open(CONFIG_FILE, "w") as f:
                 json.dump(self.config, f)
         except Exception as e:
             print(f"Error saving config: {e}")
+            
+    def browse_system_prompts(self):
+        """Open the system prompt library dialog."""
+        try:
+            # Create dialog
+            dialog = SystemPromptDialog(self, TEXT_TRANSFORMATIONS)
+            
+            # Show dialog
+            if dialog.exec() == QDialog.Accepted:
+                # Get selected prompt
+                selected_prompt = dialog.get_selected_prompt()
+                if selected_prompt:
+                    key, name, prompt_text = selected_prompt
+                    
+                    # Add to transformations if not already present
+                    if name not in TEXT_TRANSFORMATIONS:
+                        TEXT_TRANSFORMATIONS[name] = prompt_text
+                        
+                        # Add to combo box
+                        self.transformation_combo.addItem(name)
+                        
+                        # Select the new item
+                        self.transformation_combo.setCurrentText(name)
+                        
+                        # Show confirmation
+                        self.statusBar().showMessage(f"Added prompt: {name}", 3000)
+        except Exception as e:
+            self.show_error(f"Error browsing system prompts: {str(e)}")
 
     def closeEvent(self, event):
         """Handle application close event."""

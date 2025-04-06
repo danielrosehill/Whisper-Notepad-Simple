@@ -1,0 +1,1634 @@
+{
+    "basic_cleanup": {
+        "name": "Basic Cleanup Cleaner",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Take the following text and refine it to add missing punctuation, resolve typos, add paragraph spacing, and generally enhance the presentation of the text while preserving the original meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using basic cleanup style or format"
+    },
+    "extract_todos": {
+        "name": "Extract To-dos Extractor",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Extract only the to-do items from the following text. Format them as a markdown list with checkboxes. For example: '- [ ] Task description'. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "formats text using extract to-dos style or format"
+    },
+    "shakespearean": {
+        "name": "Shakespearean Writer",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Take the following text and return it in Shakespearean English, maintaining the original meaning but using the style, vocabulary, and sentence structure typical of Shakespeare's works. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using shakespearean style or format"
+    },
+    "meeting_minutes": {
+        "name": "Meeting Minutes Generator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as professional meeting minutes. Identify key discussion points, decisions made, and action items. Use appropriate headings and structure. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "transforms text using meeting minutes style or format"
+    },
+    "bullet_summary": {
+        "name": "Bullet Summary Creator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Summarize the following text as concise bullet points, capturing the main ideas and important details. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using bullet summary style or format"
+    },
+    "technical_documentation": {
+        "name": "Technical Documentation Writer",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into technical documentation format. Use appropriate headings, code blocks for any technical elements, and clear explanations. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Convert the following text into technical documentation format"
+    },
+    "email_draft": {
+        "name": "Email Draft Formatter",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a professional email format. Add an appropriate subject line, greeting, body paragraphs, and closing. Maintain a professional tone throughout. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Convert the following text into a professional email format"
+    },
+    "personalized_email": {
+        "name": "Personalized Email Builder",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a professional email format from {user_name}. Add an appropriate subject line, greeting, body paragraphs, and include this signature at the end: {email_signature}. Maintain a professional tone throughout. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Convert the following text into a professional email format from {user_name}"
+    },
+    "blog_post": {
+        "name": "Blog Post Editor",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as a blog post. Add an engaging title, organize content into sections with headings, and improve readability with proper paragraph structure. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "transforms text using blog post style or format"
+    },
+    "academic_paper": {
+        "name": "Academic Paper Formatter",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text in an academic style. Organize content into sections (Introduction, Methods, Results, Discussion, etc.), use formal language, and suggest where citations might be needed. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "converts text using academic paper style or format"
+    },
+    "social_media_post": {
+        "name": "Social Media Post Generator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a social media post. Make it concise, engaging, and add appropriate hashtags. Format it to be shareable on platforms like Twitter, LinkedIn, or Instagram. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Convert the following text into a social media post"
+    },
+    "code_documentation": {
+        "name": "Code Documentation Writer",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into code documentation. Format it with appropriate markdown, code blocks, parameter descriptions, and examples where applicable. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Convert the following text into code documentation"
+    },
+    "poetry": {
+        "name": "Poetry Creator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a poem. Maintain the core meaning but add rhythm, structure, and poetic elements. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transform the following text into a poem"
+    },
+    "anonymization": {
+        "name": "Anonymization Tool",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Take the following text and anonymize all personal identifiers such as names, locations, organizations, dates, and other specific entities that could identify individuals. Replace them with generic placeholders while preserving the overall meaning and readability of the text. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Anonymizes text by replacing names, locations, and other identifying information with generic placeholders"
+    },
+    "enthusiastic": {
+        "name": "Enthusiastic Tone Emulator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a more enthusiastic and energetic version. Add emotional adjectives, intensifiers, and expressive language while maintaining the original meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Increases emotional intensity and adds enthusiasm to the text"
+    },
+    "factual": {
+        "name": "Factual Tone Emulator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a more objective, factual tone. Remove subjective language, emotional expressions, and unnecessary adjectives. Focus on presenting information clearly and concisely with neutral language. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Removes emotional language and converts text to a more objective, factual tone"
+    },
+    "formalize": {
+        "name": "Formalize Generator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text in a more formal, professional tone. Use proper grammar, sophisticated vocabulary, and structured sentences. Eliminate colloquialisms, contractions, and casual expressions. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Elevates casual text to a more formal, professional style"
+    },
+    "informalize": {
+        "name": "Informalize Tool",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a more casual, conversational tone. Use contractions, simpler vocabulary, and a friendly approach. Make it sound more relaxed and approachable. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Makes formal text more casual and conversational"
+    },
+    "add_sayings": {
+        "name": "Add Sayings & Proverbs Writer",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Enhance the following text by incorporating relevant proverbs, sayings, or idioms that complement the content. Integrate these expressions naturally while maintaining the original meaning and flow. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Embellishes text with relevant proverbs, sayings, and idioms"
+    },
+    "de_jargonize": {
+        "name": "De-jargonize Converter",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Simplify the following text by removing technical jargon, specialized terminology, and complex language. Replace these elements with plain, accessible language that anyone can understand while preserving the core meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Removes technical jargon and simplifies complex terminology"
+    },
+    "general_prompt": {
+        "name": "General Prompt Generator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text into a clear, effective prompt for an AI assistant. Structure it with clear instructions, context, and desired output format while preserving the core information and intent. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Reformats text as a general-purpose AI prompt"
+    },
+    "image_prompts": {
+        "name": "Image Prompts Creator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into an effective text-to-image prompt. Focus on visual elements, style descriptors, composition details, and artistic references. Format it to work well with image generation AI tools. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Reformats text specifically for text-to-image AI prompting"
+    },
+    "development_spec": {
+        "name": "Development Spec Generator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a formal software development specification. Include sections for requirements, features, technical specifications, implementation details, and acceptance criteria. Use proper formatting and technical terminology appropriate for software development. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a software development specification"
+    },
+    "checklists": {
+        "name": "Checklists Builder",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a comprehensive, well-organized checklist. Convert statements into actionable items with checkboxes, group related items together, and ensure all important points are included. Format using markdown checklist syntax. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Converts text into a structured checklist format"
+    },
+    "standard_operating_procedure": {
+        "name": "Standard Operating Procedure Writer",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a formal Standard Operating Procedure (SOP) document. Include sections for purpose, scope, responsibilities, procedure steps, safety considerations, and references. Number steps sequentially and use clear, directive language. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a standard operating procedure document"
+    },
+    "calendar_event": {
+        "name": "Calendar Event Creator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Extract event details from the following text and format them as an iCalendar (ICS) formatted text that can be imported into calendar applications. Include event title, start/end times, location, description, and any other relevant details. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Creates iCalendar formatted text from event information"
+    },
+    "maximum_abbreviation": {
+        "name": "Maximum Abbreviation Tool",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Condense the following text by using abbreviations, acronyms, and shortened forms wherever possible without losing essential meaning. Remove unnecessary words and phrases while maintaining clarity for the intended audience. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Abbreviates text as much as possible while maintaining meaning"
+    },
+    "padded_out": {
+        "name": "Padded Out Writer",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Expand the following text by adding more detail, examples, explanations, and supporting points. Elaborate on key concepts, use more descriptive language, and increase the overall length while maintaining the original meaning and purpose. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Expands text with additional details and explanations"
+    },
+    "template_style": {
+        "name": "Template Style Generator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text to appear as if it were generated from a template. Include placeholder-style formatting, standardized sections, and repetitive structural elements. Maintain a consistent, formulaic approach throughout that suggests the text follows a predefined template pattern. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text to appear as if generated from a template"
+    },
+    "hyper_polite": {
+        "name": "Hyper Polite Emulator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text with extremely polite language and phrasing. Use respectful honorifics, deferential language, extensive courtesy expressions, and formal politeness markers. Ensure the tone conveys the utmost respect and consideration while maintaining the original meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text into an extremely polite and respectful version"
+    },
+    "medieval_english": {
+        "name": "Medieval English Translator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into Medieval English (circa 1100-1500 CE). Use period-appropriate vocabulary, syntax, and expressions such as 'thee', 'thou', 'hast', 'doth', and other Middle English constructions. Incorporate medieval idioms and speech patterns while preserving the core meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Converts text to Medieval English style and vocabulary"
+    },
+    "early_modern_english": {
+        "name": "Early Modern English Translator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into Early Modern English (circa 1500-1700 CE). Use vocabulary and grammatical structures from this period, which falls between Shakespeare and modern English. Include characteristic features like 'ye', second-person distinctions (thou/you), '-eth' verb endings, and period-appropriate expressions while maintaining the original meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text into Early Modern English style (post-Shakespeare, pre-modern)"
+    },
+    "victorian_english": {
+        "name": "Victorian English Writer",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text in Victorian-era English (circa 1837-1901). Use formal, elaborate sentence structures, period-appropriate vocabulary, moral overtones, and the refined expressions characteristic of 19th century writing. Maintain a proper, somewhat verbose style while preserving the original meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Converts text to Victorian-era English style and sensibilities"
+    },
+    "boundary_setting": {
+        "name": "Boundary Setting Tool",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text as a clear, firm, yet respectful communication that establishes personal or professional boundaries. Include direct statements of limits, clear expectations, consequences for boundary violations, and language that is assertive without being aggressive. Maintain a tone that is both firm and polite. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates text that clearly and respectfully establishes boundaries"
+    },
+    "polite_decline": {
+        "name": "Polite Decline Generator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a polite and considerate refusal or rejection. Include expressions of appreciation, a clear but gentle 'no', brief reasoning without overjustification, and a positive closing. Maintain a respectful tone that preserves the relationship while firmly declining. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a graceful and considerate refusal"
+    },
+    "fan_mail": {
+        "name": "Fan Mail Builder",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text as enthusiastic fan mail to a content creator. Express genuine appreciation for their work, mention specific content that resonated, describe positive impact, and include appropriate encouragement. Maintain an authentic, positive tone without being overly familiar or intrusive. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as appreciative fan mail to content creators"
+    },
+    "cold_email_response": {
+        "name": "Cold Email Response Generator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into an appropriate response to an unsolicited email or outreach. Include acknowledgment of receipt, polite but reserved tone, request for clarification of sender's identity/purpose if needed, and clear next steps or closure. Balance professionalism with appropriate caution for unknown senders. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates appropriate responses to unsolicited emails or outreach"
+    },
+    "emotional_enhancement": {
+        "name": "Emotional Enhancement Tool",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Infuse the following text with greater emotional depth and feeling. Add emotional language, sensory details, and expressive elements that convey the emotional undertones of the content while preserving the original meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Enhances text with emotional language and feeling"
+    },
+    "emotional_removal": {
+        "name": "Emotional Removal Converter",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Remove all emotional content from the following text. Strip away subjective language, emotional expressions, and affective elements to create a neutral, detached version that focuses solely on factual information. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Removes emotional content to create neutral, detached text"
+    },
+    "third_person": {
+        "name": "Third Person Format Converter",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text entirely in the third person perspective. Replace any first-person or second-person pronouns with appropriate third-person alternatives while maintaining the original meaning and content. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Converts text to third person perspective"
+    },
+    "first_person": {
+        "name": "First Person Format Emulator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text in the first person perspective using the name {user_name}. Convert all relevant pronouns and viewpoints to first person while maintaining the original meaning and content. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Converts text to first person perspective using a provided name"
+    },
+    "stylistic_emulator": {
+        "name": "Stylistic Emulator Generator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text according to the stylistic direction provided within it. Identify any style instructions in the transcribed text and apply that style to the entire content while preserving the original meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Follows stylistic emulation directions provided within the transcribed text"
+    },
+    "business_appropriate": {
+        "name": "Business Appropriate Tool",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Filter and reformat the following text to ensure it maintains a professional business tone. Remove any personal information, casual language, or inappropriate content. Ensure the text is concise, clear, and suitable for professional business communication. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Filters text to ensure professional business tone and removes personal information"
+    },
+    "friends_and_family": {
+        "name": "Friends And Family Builder",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text in a warm, casual tone appropriate for friends and family. Remove excessive formality, add conversational elements, and make the language more relaxed and personal while maintaining the original meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Makes text more casual and personal for informal communication"
+    },
+    "no_salutation": {
+        "name": "No Salutation Generator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Edit the following text to remove any greeting or salutation at the beginning (such as 'Dear X,' or 'Hello,'). Start directly with the main content while preserving all other elements of the text. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Removes greetings and salutations from the beginning of text"
+    },
+    "no_sign_off": {
+        "name": "No Sign-off Converter",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Edit the following text to remove any closing sign-off at the end (such as 'Regards,' 'Sincerely,' or 'Best wishes,'). End with the final content paragraph while preserving all other elements of the text. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Removes closing sign-offs from the end of text"
+    },
+    "direct_communication": {
+        "name": "Direct Communication Tool",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Edit the following text to remove both the opening salutation/greeting and the closing sign-off. Present only the core content in a direct, concise manner while preserving the main message and information. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Removes both greetings and sign-offs for direct communication"
+    },
+    "linkedin_post": {
+        "name": "Linkedin Post Creator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text as a professional LinkedIn post. Use appropriate paragraph breaks, add relevant hashtags, maintain a professional yet engaging tone, and optimize for visibility on the LinkedIn platform. Keep it concise and impactful. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text specifically for LinkedIn platform posting"
+    },
+    "internal_email": {
+        "name": "Internal Email Writer",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text as an internal email to colleagues within an organization. Use a professional but familiar tone, clear subject line, appropriate greeting, concise paragraphs, and a suitable sign-off. Focus on clarity and directness. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as an internal email to colleagues"
+    },
+    "news_report": {
+        "name": "News Report Generator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a professional news report format. Add an attention-grabbing headline, include a concise lead paragraph summarizing the key points, organize information in decreasing order of importance, use objective language, and incorporate quotes if applicable. Follow AP style guidelines for formatting. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text in the style of a professional news article"
+    },
+    "email_newsletter": {
+        "name": "Email Newsletter Builder",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text as a professional email newsletter. Include an engaging subject line, a brief introduction, organized content with clear section headings, call-to-action elements, and a professional footer. Optimize for readability with short paragraphs and bullet points where appropriate. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a professional email newsletter"
+    },
+    "family_newsletter": {
+        "name": "Family Newsletter Editor",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a warm, personal family newsletter. Include a friendly greeting, organize updates by family member or topic, add personal anecdotes and a conversational tone, include references to shared memories or inside jokes where appropriate, and close with an affectionate sign-off. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a personal newsletter for friends and family"
+    },
+    "invitation": {
+        "name": "Invitation Generator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as a formal invitation. Clearly structure it to include WHO is invited, WHAT the event is, WHERE it will take place (with complete address), WHEN it will occur (with date and time), and any additional details like dress code or RSVP information. Use appropriate formal language and formatting for an invitation. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a formal invitation with who, what, where sections"
+    },
+    "cover_letter": {
+        "name": "Cover Letter Creator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a professional cover letter format. Include appropriate sections such as header, date, recipient information, greeting, body paragraphs highlighting qualifications and interest, closing, and signature. Maintain a professional and enthusiastic tone. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text in the structure of a professional cover letter"
+    },
+    "light_touch_shakespearean": {
+        "name": "Light Touch Shakespearean",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Apply subtle Shakespearean elements to the following text. Add occasional Elizabethan phrases, light poetic flourishes, and mild period-appropriate language while maintaining the original meaning and keeping most of the text in modern English. The result should be recognizably modern with just a hint of Shakespeare. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Adds subtle Shakespearean elements while keeping text mostly modern"
+    },
+    "to_do_lists": {
+        "name": "To-do Lists Builder",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a clear, actionable to-do list. Break down larger tasks into smaller, manageable steps. Use a format that is easy to read and follow, with checkboxes for marking completed tasks. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Converts text into a structured to-do list format"
+    },
+    "dramatize": {
+        "name": "Dramatize Text",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text to increase its dramatic impact. Use hyperbole, exaggerated language, and intensifiers to make the content more compelling and emotionally charged while preserving the core meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Increases dramatic impact of text using hyperbole and exaggerated language"
+    },
+    "flowery_language": {
+        "name": "Flowery Language",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Infuse the following text with ornate, elaborate language. Use lengthy words, descriptive adjectives, and vivid comparisons to create a rich, decorative prose style while maintaining the original meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Enhances text with elaborate vocabulary, descriptive adjectives, and vivid comparisons"
+    },
+    "literary_tone": {
+        "name": "Literary Tone",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text to emulate a literary tone. Use sophisticated sentence structures, rich vocabulary, thoughtful imagery, and stylistic devices common in literary fiction while preserving the original meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text to have a sophisticated literary style and tone"
+    },
+    "meeting_agenda": {
+        "name": "Meeting Agenda Generation",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text in the style of a formal meeting agenda. Include sections for meeting details (date, time, location), attendees, objectives, discussion topics with allocated time slots, and any other relevant agenda items. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a structured meeting agenda with appropriate sections"
+    },
+    "gray_rock": {
+        "name": "Gray Rock Text",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Edit the following text to minimize details shared and make it intentionally bland and non-engaging. Remove colorful language, emotional content, and interesting details while maintaining basic factual information. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Minimizes details and makes text intentionally bland and non-engaging"
+    },
+    "typo_master": {
+        "name": "Typo Master",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Deliberately edit the following text to add many realistic typos. Include common typing errors like transposed letters, missed keys, doubled letters, and autocorrect-style mistakes. Maintain readability while making the text appear hastily typed. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Deliberately adds realistic typos throughout the text"
+    },
+    "computer_error": {
+        "name": "Computer Error",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Edit the following text to randomly insert elements that appear to be unintentional computer system artifacts. Include things like error codes, system messages, random character strings, file paths, or other technical elements that would appear if a computer system malfunctioned during text processing. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Inserts random computer system artifacts and errors into the text"
+    },
+    "serious_disclaimer": {
+        "name": "Serious Disclaimer",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Add a formal, serious disclaimer to the beginning or end of the following text. The disclaimer should be appropriate to the content and context, addressing potential legal, ethical, or practical concerns related to the information presented. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Adds a formal, serious disclaimer to the text"
+    },
+    "all_caps": {
+        "name": "All Caps",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text by converting all characters to uppercase letters. Maintain all punctuation, spacing, and formatting while changing only the case of the letters. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Converts all text to uppercase letters"
+    },
+    "chaos_caps": {
+        "name": "Chaos Caps",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a chaotic mix of uppercase and lowercase letters. Randomly capitalize individual letters, parts of words, or entire words throughout the text. The capitalization should appear inconsistent and unpredictable. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates text with random and chaotic capitalization patterns"
+    },
+    "thought_leader": {
+        "name": "Thought Leader",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text to make it sound like it's coming from a high-level thought leader providing strategic insights. Use industry-specific terminology, reference broader trends and patterns, incorporate forward-thinking perspectives, and adopt an authoritative yet accessible tone. The result should position the author as a visionary expert in their field. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text to sound like it's from a visionary thought leader providing high-level insights"
+    },
+    "bluf": {
+        "name": "Bluf (bottom Line Up Front)",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text using the Bottom Line Up Front (BLUF) format commonly used in military and government communications. Add a clear, concise BLUF header at the beginning that summarizes the key point, action required, or decision needed. Use appropriate military-style keywords (INFO, ACTION, DECISION, etc.) to denote the type of communication. Maintain the original content after the BLUF section. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Adds a Bottom Line Up Front (BLUF) header element used in military communications"
+    },
+    "tldr": {
+        "name": "Tl;dr Summary",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Add a 'TL;DR' (Too Long; Didn't Read) section to the beginning of the following text. The TL;DR should be approximately 2-3 sentences that concisely summarize the main points or key takeaways from the full text. Format it clearly as a separate section before the main content. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Adds a brief TL;DR summary section to the beginning of the text"
+    },
+    "executive_summary": {
+        "name": "Executive Summary",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Prepend a professional executive summary to the following text. The summary should be concise (3-5 bullet points), highlight key findings, recommendations, and critical information. Format it clearly as 'EXECUTIVE SUMMARY' with appropriate spacing before the full text begins. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Prepends a concise executive summary to the beginning of the text"
+    },
+    "slang_system": {
+        "name": "Slang System",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Yo, take this text and jazz it up with as much slang as possible, fam! Keep the main vibe and meaning, but make it sound super casual and street. Throw in some current slang terms, abbreviations, and informal language patterns that the cool kids are using these days. Make it sound like it's coming from someone who's totally down with the latest lingo. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using heavy slang and informal language"
+    },
+    "maximum_emoji": {
+        "name": "Maximum Emoji",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text by adding as many relevant emojis as possible. Insert emojis after key words, at the end of sentences, and use them to replace words where appropriate. The result should be extremely emoji-rich while still maintaining readability. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Adds a high density of emojis throughout the text"
+    },
+    "moderate_emoji": {
+        "name": "Moderate Emoji",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Enhance the following text with a few well-placed emojis. Add them sparingly at natural points to emphasize key emotions or concepts, but keep the text professional and not overwhelming. Use only 3-5 emojis in total, placed strategically for maximum impact. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Adds a few strategic emojis to enhance the text"
+    },
+    "commitment_filter": {
+        "name": "Commitment Filter",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Review the following text and remove any language that commits the author to specific actions, deadlines, or promises. Replace commitments with more open-ended, non-binding language while preserving the general meaning. The result should avoid creating any obligations or expectations. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Removes commitments and obligations from text to avoid creating expectations"
+    },
+    "jargon_stuffer": {
+        "name": "Jargon Stuffer",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text by deliberately adding as much technical jargon, industry buzzwords, and specialized terminology as possible. Replace simple terms with complex alternatives, incorporate acronyms, and use unnecessarily complicated language while maintaining the core meaning. The result should sound impressively technical but potentially confusing to non-experts. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Deliberately adds excessive technical jargon and buzzwords to text"
+    },
+    "highly_corporate": {
+        "name": "Highly Corporate",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into corporate language with formal business terminology, strategic buzzwords, and professional phrasing. Use corporate jargon, passive voice where appropriate, and frame concepts in terms of business objectives, stakeholder value, and organizational priorities. The result should sound like it came from a formal corporate communication. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Rewrites text using formal corporate language and business terminology"
+    },
+    "sensitivity": {
+        "name": "Sensitivity",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text to ensure it is sensitive, empathetic, and inclusive. Replace potentially insensitive language with more considerate alternatives, acknowledge diverse perspectives, use person-first language where appropriate, and add empathetic elements that show understanding of others' experiences. The result should be respectful and compassionate. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Ensures text is sensitive, empathetic, and inclusive"
+    },
+    "decisive": {
+        "name": "Decisive",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Edit the following text to increase the conviction and decisiveness in the author's statements. Replace tentative language with confident assertions, eliminate hedging words and phrases, use strong declarative statements, and convey certainty in the content. The result should sound authoritative and resolute. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Increases conviction and decisiveness in the text"
+    },
+    "to_the_point": {
+        "name": "To The Point",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Edit the following text to make it more concise while preserving as much of the original meaning as possible. Remove unnecessary words, eliminate redundancies, and streamline expressions without adding new content or summaries. The result should be a shorter version that retains the essential information and tone of the original. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Makes text more concise while preserving original meaning"
+    },
+    "short_paragraphs": {
+        "name": "Short Paragraphs",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text to use shorter paragraphs as is common in web publishing. Break longer paragraphs into smaller ones of 2-3 sentences each, add appropriate transitions where needed, and ensure each paragraph focuses on a single idea. Maintain all original content but make it more visually digestible. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Reformats text with shorter paragraphs for better web readability"
+    },
+    "clickbaity": {
+        "name": "Clickbaity",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text in the style of clickbait and sensational online news coverage. Use attention-grabbing language, create a sense of urgency or amazement, incorporate hyperbole, add emotional triggers, and format with dramatic headlines or subheadings. The result should entice readers to engage with the content through curiosity or emotional reaction. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text into attention-grabbing clickbait style"
+    },
+    "neutralize_opinions": {
+        "name": "Neutralize Opinions",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text to make it as neutral as possible. Identify and soften any strong opinions, remove emotional language, balance one-sided arguments, and present information in an objective manner. The result should blunt any strong viewpoints while maintaining the core information. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Makes opinionated text more neutral and balanced"
+    },
+    "emphasize_opinions": {
+        "name": "Emphasize Opinions",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Enhance the following text by amplifying any opinions expressed by the author. Identify viewpoints, strengthen the language used to express them, add emphasis, and make the author's stance more pronounced. If the text is already neutral, add some opinionated elements that align with the apparent direction of the content. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Amplifies and strengthens opinions in the text"
+    },
+    "italian_random": {
+        "name": "Italian Random",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text by randomly inserting Italian words or phrases throughout. Replace occasional English words with their Italian equivalents or add Italian expressions where appropriate. The result should be a fun mix of the original language with Italian elements scattered throughout, maintaining readability while adding Italian flair. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Inserts random Italian words throughout the text"
+    },
+    "endearing_old_timer": {
+        "name": "Endearing Old Timer",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text as if it's being narrated by a charming elderly person who is baffled by modern technology. Express confusion, wonder, or slight exasperation at any mention of contemporary devices, digital services, or recent innovations. Use phrases like 'back in my day,' 'newfangled,' or 'what will they think of next?' Include gentle humor and wisdom that comes with age, while maintaining the core information of the original text. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Rewrites text from the perspective of a charming elderly person confused by modern technology"
+    },
+    "platitudes_lover": {
+        "name": "Platitudes Lover",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text by generously incorporating common platitudes, clich\u00e9s, and inspirational sayings throughout. Add phrases like 'every cloud has a silver lining,' 'when one door closes, another opens,' 'the early bird catches the worm,' and similar well-worn expressions. The result should maintain the original meaning while being stuffed with these familiar, comforting phrases. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Fills text with common platitudes, clich\u00e9s, and inspirational sayings"
+    },
+    "wikileaks_cable": {
+        "name": "Wikileaks Diplomatic Cable",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text to resemble a classified diplomatic cable as seen in the Wikileaks releases. Use ALL CAPS for section headers (e.g., SUMMARY, COMMENT), include a subject line with location and date, use formal diplomatic language and State Department terminology, include classification markers (e.g., CONFIDENTIAL, SENSITIVE), and organize content into concise, numbered paragraphs. The tone should be formal, analytical, and dispassionate. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text in the style of leaked diplomatic cables with formal headers and classification markers"
+    },
+    "legal_contract": {
+        "name": "Legal Contract",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into legal contract language. Use formal legal terminology, define key terms, organize content into numbered sections and subsections, include appropriate legal clauses and provisions, and adopt the precise, unambiguous language characteristic of legal documents. The result should resemble a professional legal agreement. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Converts text into formal legal contract language with appropriate structure and terminology"
+    },
+    "medical_report": {
+        "name": "Medical Report",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text as a professional medical report. Include appropriate sections such as Patient Information, History, Assessment, and Plan. Use medical terminology, maintain clinical objectivity, include relevant measurements or observations, and format in a structured, concise manner typical of healthcare documentation. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a structured medical report with appropriate clinical terminology"
+    },
+    "recipe_format": {
+        "name": "Recipe Format",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a well-structured recipe format. Include a descriptive title, ingredients list with quantities, step-by-step cooking instructions, preparation and cooking times, serving information, and optional notes or tips. Organize in a clear, easy-to-follow format typical of cookbooks or recipe websites. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text into a properly formatted recipe with ingredients and instructions"
+    },
+    "travel_guide": {
+        "name": "Travel Guide",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text as a travel guide entry. Include sections for Overview, Highlights, Getting There, Where to Stay, What to See, Local Cuisine, and Practical Tips. Use an engaging, informative tone with descriptive language that appeals to travelers. Format with clear headings and concise, useful information. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a helpful travel guide entry with practical sections for travelers"
+    },
+    "screenplay_format": {
+        "name": "Screenplay Format",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into proper screenplay format. Include scene headings (INT/EXT, location, time), action descriptions, character names, dialogue, and parentheticals where appropriate. Follow standard screenplay formatting conventions with proper spacing, capitalization, and layout. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text into professional screenplay format with proper scene headings and dialogue"
+    },
+    "eli5": {
+        "name": "Explain Like I'm 5",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text to explain the concepts as if to a 5-year-old child. Use simple vocabulary, short sentences, concrete examples, analogies to everyday experiences, and an encouraging, friendly tone. Avoid jargon, complex terminology, and abstract concepts without relatable examples. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Simplifies complex text into child-friendly explanations with basic vocabulary"
+    },
+    "historical_letter": {
+        "name": "Historical Letter",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a letter written during a significant historical period (approximately 1800s). Use period-appropriate language, references, and formatting including date line, salutation, formal closing, and signature. Include subtle references to historical events or conditions of the time while maintaining the original content's meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a letter from a historical period with appropriate language and references"
+    },
+    "science_fiction": {
+        "name": "Science Fiction",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text with a science fiction flavor. Incorporate futuristic terminology, references to advanced technology, space travel, alien species, or other sci-fi elements while preserving the core information and meaning of the original text. The result should feel like it belongs in a science fiction universe. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Adds science fiction elements and terminology to text while preserving core meaning"
+    },
+    "film_noir_detective": {
+        "name": "Film Noir Detective",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text in the style of a hardboiled detective from a film noir movie. Use short, punchy sentences, cynical observations, vivid metaphors, and a world-weary tone. Include references to rain-slicked streets, shadows, cigarette smoke, and other noir elements while preserving the original meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text into the cynical, hardboiled style of a film noir detective"
+    },
+    "jane_austen": {
+        "name": "Jane Austen",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text in the style of Jane Austen. Use elegant, formal 19th century English with complex sentence structures, subtle irony, social observations, and attention to manners and propriety. Maintain Austen's characteristic wit and insightful commentary on human behavior while preserving the original content. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text into the elegant, witty style of Jane Austen's novels"
+    },
+    "mark_twain": {
+        "name": "Mark Twain",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text in the style of Mark Twain. Use folksy American vernacular, humorous exaggerations, satirical observations, and a conversational tone with occasional philosophical asides. Include Twain's characteristic wit and irreverence while preserving the original meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text into Mark Twain's humorous, folksy American style"
+    },
+    "hemingway": {
+        "name": "Hemingway",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text in Ernest Hemingway's distinctive style. Use short, direct sentences with simple language, minimal adjectives, and understated emotion. Focus on concrete details rather than abstract concepts, and employ Hemingway's 'iceberg theory' where deeper meaning lies beneath the surface of straightforward prose. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text into Hemingway's concise, direct writing style"
+    },
+    "tolkien": {
+        "name": "Tolkien",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text in the style of J.R.R. Tolkien. Use elevated, somewhat archaic language with detailed descriptions of settings and atmosphere. Include occasional references to nature, light and darkness, and the passage of time. Adopt the measured, mythic quality of Tolkien's prose while preserving the original content. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text into Tolkien's elevated, descriptive fantasy style"
+    },
+    "pirate_speak": {
+        "name": "Pirate Speak",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Arr, rewrite this text as if spoken by a stereotypical pirate! Replace standard words with pirate lingo (e.g., 'you' becomes 'ye', 'my' becomes 'me'), add pirate phrases like 'shiver me timbers', 'avast', and 'ahoy', reference nautical elements, treasure, and the high seas. Use a swashbuckling tone while maintaining the original meaning, ye scurvy dog! You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text into stereotypical pirate speech with nautical references"
+    },
+    "yoda": {
+        "name": "Yoda",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text in the style of Yoda from Star Wars. Rearrange sentence structure to place objects or predicates before subjects (e.g., 'Powerful you have become' instead of 'You have become powerful'). Use Yoda's characteristic broken syntax, wise but cryptic phrasing, and occasional references to the Force while preserving the original meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using Yoda's distinctive inverted syntax and speaking style"
+    },
+    "sherlock_holmes": {
+        "name": "Sherlock Holmes",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text as if spoken by Sherlock Holmes. Use precise, analytical language with deductive reasoning, attention to minute details, and occasional references to clues and evidence. Include Holmes' characteristic confidence, intellectual curiosity, and slightly arrogant tone while preserving the original content. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text into the analytical, deductive style of Sherlock Holmes"
+    },
+    "victorian_gothic": {
+        "name": "Victorian Gothic",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text in the style of Victorian Gothic literature. Use ornate, atmospheric language with elements of mystery, dread, and the supernatural. Include references to gloomy settings, strange occurrences, heightened emotions, and moral concerns. Adopt the melodramatic, suspenseful tone characteristic of Gothic fiction while preserving the original meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text into the atmospheric, melodramatic style of Victorian Gothic literature"
+    },
+    "legal_brief": {
+        "name": "Legal Brief",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a formal legal brief. Use precise legal terminology, formal citation format, structured argumentation with clear premises and conclusions, and maintain an authoritative, objective tone. Include appropriate legal phrases such as 'pursuant to,' 'hereinafter,' 'aforementioned,' and 'notwithstanding.' Format with numbered paragraphs where appropriate. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Converts text into formal legal writing style with appropriate terminology and structure"
+    },
+    "medical_documentation": {
+        "name": "Medical Documentation",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into professional medical documentation. Use appropriate medical terminology, maintain a concise and objective tone, organize information in the SOAP format (Subjective, Objective, Assessment, Plan) where applicable, and ensure clarity for healthcare professionals while avoiding ambiguity. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as clinical medical documentation with appropriate terminology and structure"
+    },
+    "financial_report": {
+        "name": "Financial Report",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a formal financial report. Use appropriate financial terminology, maintain a professional and analytical tone, organize information into clear sections (Executive Summary, Financial Performance, Outlook, etc.), include references to metrics and KPIs where relevant, and ensure precision in discussing numerical data. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Converts text into a structured financial report with appropriate terminology and analytical tone"
+    },
+    "scientific_paper": {
+        "name": "Scientific Paper",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into scientific paper format. Use formal scientific language, passive voice where appropriate, organize into standard scientific paper sections (Abstract, Introduction, Methods, Results, Discussion, Conclusion), maintain objective tone, and include placeholders for citations and references where needed. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text in scientific paper style with appropriate structure and terminology"
+    },
+    "journalistic_article": {
+        "name": "Journalistic Article",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a journalistic article. Structure with an attention-grabbing headline, a concise lead paragraph summarizing the key points, followed by supporting details in inverted pyramid style (most important information first). Use clear, factual language, include quotes where appropriate, and maintain journalistic objectivity. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Converts text into journalistic style with proper article structure and tone"
+    },
+    "engineering_specification": {
+        "name": "Engineering Specification",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a formal engineering specification document. Use precise technical terminology, quantitative descriptions with units where applicable, organize into sections (Scope, Requirements, Specifications, Testing Procedures), include numbered lists for sequential procedures, and maintain a clear, unambiguous technical tone. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as an engineering specification with technical precision and structure"
+    },
+    "real_estate_listing": {
+        "name": "Real Estate Listing",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a professional real estate listing. Highlight key property features, use descriptive and appealing language, include property specifications (square footage, bedrooms, bathrooms, etc.), emphasize location benefits, and maintain an enthusiastic yet professional tone that would attract potential buyers or renters. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Converts text into an engaging real estate property listing format"
+    },
+    "language_variation": {
+        "name": "Language Variation",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text to increase the diversity of vocabulary and sentence structures. Replace repetitive words with appropriate synonyms, vary sentence lengths and patterns, introduce more sophisticated phrasing where appropriate, and enhance the overall linguistic richness without changing the core meaning or adding new information. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Enhances vocabulary diversity and reduces word repetition while maintaining original meaning"
+    },
+    "donor_communications": {
+        "name": "Donor Communications",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into effective donor communication. Use a warm, appreciative tone that emphasizes impact and gratitude, incorporate storytelling elements that connect donors to the mission, include specific achievements made possible by donations, add appropriate calls to action, and maintain a professional yet personal style that builds donor relationships. The result should inspire continued support while respecting the donor's intelligence and commitment. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as donor-focused communication with appropriate tone and impact messaging"
+    },
+    "job_application_cover_letter": {
+        "name": "Job Application Cover Letter",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a professional job application cover letter. Structure with a formal greeting, strong opening paragraph stating the position sought, middle paragraphs highlighting relevant qualifications and achievements with specific examples, a closing paragraph expressing interest in an interview, and a formal sign-off. Use confident but not arrogant language, focus on value to the employer, and maintain a professional, enthusiastic tone throughout. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a professional job application cover letter"
+    },
+    "resume_achievement_statements": {
+        "name": "Resume Achievement Statements",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into powerful resume achievement statements. Begin each statement with strong action verbs, emphasize measurable results and quantifiable achievements, use industry-specific keywords, eliminate first-person pronouns, and format as concise bullet points. Focus on outcomes, impacts, and specific contributions rather than just responsibilities. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Converts text into achievement-focused resume bullet points with strong action verbs"
+    },
+    "interview_response_prep": {
+        "name": "Interview Response Preparation",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text as structured interview responses using the STAR method (Situation, Task, Action, Result). For each main point, clearly define the situation/context, specify the task or challenge, detail the actions taken, and emphasize positive results or learnings. Use professional language, include specific examples and metrics where possible, and keep responses concise yet comprehensive. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Structures text as interview responses using the STAR method with clear examples"
+    },
+    "linkedin_profile_summary": {
+        "name": "Linkedin Profile Summary",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a compelling LinkedIn profile summary. Begin with a strong professional identity statement, highlight core expertise and unique value proposition, incorporate industry keywords for searchability, balance professional achievements with personality, include a clear call to action, and maintain a first-person perspective. The result should be engaging, concise (under 2000 characters), and optimized for both human readers and LinkedIn's algorithm. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text into an optimized LinkedIn profile summary with professional branding"
+    },
+    "business_proposal": {
+        "name": "Business Proposal",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a structured business proposal. Include sections for Executive Summary, Problem Statement, Proposed Solution, Implementation Plan, Timeline, Budget/Pricing, and Expected Outcomes. Use professional business language, incorporate relevant data points and industry terminology, emphasize client benefits and ROI, and maintain a confident, authoritative tone throughout. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a comprehensive business proposal with clear sections and value proposition"
+    },
+    "client_presentation": {
+        "name": "Client Presentation",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into content suitable for a client presentation. Structure with a compelling introduction, clear agenda, main content points with supporting evidence, actionable recommendations, and a strong conclusion. Format with concise bullet points, use visual language that complements potential slides, incorporate transition phrases between sections, and maintain a professional yet engaging tone appropriate for verbal delivery. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text into client presentation content with clear structure and visual elements"
+    },
+    "consulting_report": {
+        "name": "Consulting Report",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text as a professional consulting report. Include formal sections for Executive Summary, Methodology, Findings, Analysis, Recommendations, and Implementation Steps. Use data-driven language, incorporate industry best practices and benchmarks, maintain an objective analytical tone, include actionable insights with clear rationales, and format with appropriate headings, subheadings, and professional terminology. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a structured consulting report with analysis and actionable recommendations"
+    },
+    "timesheet_generation": {
+        "name": "Timesheet Generation",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a formatted timesheet. Extract dates, times, projects, tasks, and durations from the text. Organize entries chronologically with clear date headers, include start and end times where mentioned, categorize work by project or client when specified, calculate total hours per day and overall, and format in a structured, tabular style suitable for time tracking and billing purposes. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Generates a structured timesheet from dictated time tracking information"
+    },
+    "structured_chatgpt_prompt": {
+        "name": "Structured Chatgpt Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a well-structured ChatGPT prompt. Format it with clear sections for context, specific instructions, constraints or limitations, expected format for the response, and any examples if needed. Use appropriate formatting with headings, bullet points, and paragraph breaks to maximize clarity and effectiveness. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates a well-structured prompt optimized for ChatGPT and similar language models"
+    },
+    "chain_of_thought_prompt": {
+        "name": "Chain-of-thought Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text into a prompt that explicitly requests step-by-step reasoning. Structure it to encourage the AI to break down the problem into logical steps, show its work, explain its thinking process, and arrive at a conclusion gradually. Include phrases like 'think step by step' or 'let's work through this systematically' to encourage detailed reasoning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates prompts that encourage AI models to show detailed step-by-step reasoning"
+    },
+    "few_shot_prompt": {
+        "name": "Few-shot Learning Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a few-shot learning prompt. Structure it with a clear task description followed by 2-3 examples of the desired input-output pattern. Format each example consistently with clear delineation between input and output. Ensure the examples demonstrate the pattern you want the AI to follow, then add your actual query following the same format as the examples. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates prompts with examples to guide AI in producing responses in a specific format or style"
+    },
+    "creative_writing_prompt": {
+        "name": "Creative Writing Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into an effective creative writing prompt for an AI. Include specific genre, style, character, setting, and plot elements as appropriate. Structure it to inspire creative output while providing enough constraints to guide the AI toward the desired type of content. Balance specific details with room for creative interpretation. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates prompts designed to generate creative writing from AI models"
+    },
+    "technical_solution_prompt": {
+        "name": "Technical Solution Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text into a technical prompt requesting code or technical solutions. Clearly specify the programming language or technical framework, define the problem precisely, include any constraints or requirements, specify expected input/output formats, and request explanations of the solution. Structure it to maximize the likelihood of receiving working, efficient code or technical advice. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates prompts optimized for requesting code solutions or technical explanations from AI"
+    },
+    "role_based_prompt": {
+        "name": "Role-based Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a prompt that assigns a specific expert role to the AI. Begin with 'You are an expert in [field]' or similar phrasing, followed by specific instructions that leverage that expertise. Include relevant context, clear questions or requests, and specify the desired format or depth of response expected from that expert perspective. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates prompts that assign specific expert roles to the AI to leverage specialized knowledge"
+    },
+    "comparative_analysis_prompt": {
+        "name": "Comparative Analysis Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a prompt requesting comparative analysis between multiple options, approaches, or viewpoints. Structure it to clearly identify what should be compared, specify the dimensions or criteria for comparison, request balanced treatment of all options, and ask for a conclusion or recommendation if appropriate. Format it to encourage thorough, systematic analysis. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates prompts that request detailed comparisons between multiple options or perspectives"
+    },
+    "data_analysis_prompt": {
+        "name": "Data Analysis Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text into a prompt for AI data analysis. Structure it to clearly present the data or describe the dataset, specify what insights are being sought, request appropriate visualizations or statistical measures, and ask for clear interpretations of the findings. Include any specific hypotheses to test or questions to answer about the data. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates prompts optimized for requesting data analysis and insights from AI tools"
+    },
+    "persona_based_prompt": {
+        "name": "Persona-based Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a prompt that establishes a specific persona for the AI to adopt. Define the persona's characteristics, expertise, communication style, and perspective in detail. Then formulate the actual request or question that should be answered from this persona's viewpoint. The result should elicit responses that consistently maintain the defined persona throughout. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates prompts that establish a consistent persona for the AI to maintain in its responses"
+    },
+    "constraint_based_prompt": {
+        "name": "Constraint-based Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text into a prompt with clear constraints and limitations. Explicitly define what the AI should NOT do or include, specify word or length limits, establish format restrictions, and set boundaries on the scope of the response. Structure these constraints prominently to ensure they guide the AI's response effectively. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates prompts with explicit constraints to control and focus AI responses"
+    },
+    "multi_turn_prompt": {
+        "name": "Multi-turn Conversation Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a prompt designed for an extended multi-turn conversation with an AI. Structure it to establish context that should persist across multiple exchanges, define long-term goals for the conversation, include initial questions or instructions, and specify how the AI should maintain continuity and build upon previous responses in subsequent turns. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates prompts optimized for extended conversations with context retention across multiple turns"
+    },
+    "socratic_prompt": {
+        "name": "Socratic Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a Socratic-style prompt that uses questions to guide reasoning. Instead of directly asking for answers, structure a series of leading questions that progressively build toward deeper understanding. Format it to encourage exploration of a concept through guided inquiry rather than direct instruction. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates prompts using Socratic questioning to guide AI through a reasoning process"
+    },
+    "adversarial_thinking_prompt": {
+        "name": "Adversarial Thinking Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text into a prompt that encourages adversarial thinking. Structure it to request both supporting and opposing viewpoints on a topic, ask for potential weaknesses or edge cases in a proposed solution, or challenge assumptions. Format it to promote critical analysis and thorough examination of potential flaws or counterarguments. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates prompts that encourage critical examination of multiple perspectives and potential weaknesses"
+    },
+    "format_enforcing_prompt": {
+        "name": "Format-enforcing Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a prompt with strict output format requirements. Specify exactly how the response should be structured, including required sections, headers, formatting elements, and data organization. Use examples of the desired format where helpful, and explicitly state that adherence to the specified format is essential. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates prompts that enforce specific output formats and structures in AI responses"
+    },
+    "iterative_refinement_prompt": {
+        "name": "Iterative Refinement Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a prompt designed for iterative refinement. Structure it to request an initial output, then specify criteria or directions for improving that output in subsequent iterations. Include clear guidance on what aspects should be refined, what feedback will be provided, and how the refinement process should proceed. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates prompts designed for multi-step refinement processes with feedback loops"
+    },
+    "zero_shot_cot_prompt": {
+        "name": "Zero-shot Chain Of Thought",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text into a zero-shot chain of thought prompt. Structure it to pose a complex question or problem, then explicitly instruct the AI to 'think step by step' before providing its final answer, without providing specific examples. The prompt should encourage the AI to break down its reasoning process naturally without being shown how to do so. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates prompts that encourage step-by-step reasoning without providing examples"
+    },
+    "scenario_based_prompt": {
+        "name": "Scenario-based Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a prompt that establishes a detailed hypothetical scenario. Describe the situation, relevant context, key actors, and specific conditions that apply. Then formulate questions or requests that should be addressed within the constraints of this scenario. The result should elicit responses that remain consistent with the established scenario. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates prompts based on hypothetical scenarios to explore specific situations or conditions"
+    },
+    "metacognitive_prompt": {
+        "name": "Metacognitive Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a prompt that encourages metacognitive awareness in the AI's response. Structure it to request that the AI explain its own reasoning process, discuss confidence levels in different parts of its response, identify potential limitations in its approach, and reflect on alternative methods it could have used. The result should elicit responses that demonstrate self-reflection about the thinking process. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates prompts that encourage AI to reflect on and explain its own reasoning process"
+    },
+    "multimodal_prompt": {
+        "name": "Multimodal Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text into a prompt designed for multimodal AI systems that can process both text and images. Structure it to clearly indicate what text instructions apply to the image component, specify how text and visual elements should interact, and detail the desired output format that combines insights from both modalities. Include placeholders for where images would be inserted. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates prompts optimized for multimodal AI systems that process both text and images"
+    },
+    "ethical_consideration_prompt": {
+        "name": "Ethical Consideration Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a prompt that explicitly requests ethical analysis. Structure it to identify the ethical dimensions of a question or problem, ask for consideration of multiple ethical frameworks or perspectives, request discussion of potential harms and benefits, and encourage nuanced reasoning about ethical tradeoffs. The result should elicit responses that demonstrate thoughtful ethical reflection. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Creates prompts that focus on ethical dimensions and considerations of a topic"
+    },
+    "readme_format": {
+        "name": "Readme Format",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as a GitHub README.md file. Include appropriate sections such as introduction, installation instructions, usage examples, features, contributing guidelines, and license information where applicable. Use proper markdown formatting with headings, code blocks, lists, and emphasis where appropriate. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text in the style of a GitHub repository README file with proper markdown sections"
+    },
+    "letter_format": {
+        "name": "Letter Format",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as a traditional formal letter. Include sender address, date, recipient address, formal greeting, body paragraphs, complimentary close, and signature. Maintain proper spacing and formatting conventions used in traditional printed correspondence. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a traditional printed letter with proper addressing and structure"
+    },
+    "instructions_format": {
+        "name": "Instructions Format",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a clear, step-by-step list of instructions. Number each step sequentially, use concise and direct language, group related steps into sections if needed, and include any warnings or tips in a visually distinct format. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a numbered list of clear, sequential instructions"
+    },
+    "howto_guide": {
+        "name": "How-to Guide",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a comprehensive how-to guide. Include an introduction explaining the purpose and outcome, a materials/prerequisites section, step-by-step instructions with clear headings, troubleshooting tips, and a conclusion. Use a friendly, instructional tone throughout. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a detailed how-to guide with sections for materials, steps, and troubleshooting"
+    },
+    "oped_format": {
+        "name": "Op-ed Format",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Reformat the following text as an opinion editorial (op-ed). Include a compelling headline, a strong opening paragraph that states the main argument, supporting paragraphs with evidence and reasoning, counterarguments with rebuttals, and a persuasive conclusion. Use a confident, authoritative tone while maintaining a respectful approach to opposing viewpoints. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as an opinion editorial with persuasive arguments and a clear position"
+    },
+    "letter_to_editor": {
+        "name": "Letter To Editor",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as a letter to the editor of a publication. Include a concise headline, a formal salutation, a brief introduction referencing the article or issue being addressed, a clear statement of your position, supporting points, and a conclusion with a call to action if appropriate. Keep the tone respectful yet persuasive. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a letter to the editor with proper structure and persuasive elements"
+    },
+    "log_format": {
+        "name": "Log Format",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as a chronological log entry. Begin with the timestamp provided by the user, followed by structured, concise entries that document events, observations, or data points. Use consistent formatting for each entry, separate entries clearly, and maintain an objective, factual tone throughout. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a timestamped log entry with consistent structure and objective tone"
+    },
+    "bug_report_format": {
+        "name": "Bug Report Format",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as a formal bug report. Include sections for summary, environment details, steps to reproduce, expected behavior, actual behavior, and any relevant error messages or logs. Use clear, technical language and provide sufficient detail for developers to understand and address the issue. Add severity and priority indicators if possible. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a structured bug report with technical details for developers"
+    },
+    "colleague_request_format": {
+        "name": "Colleague Request Format",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as a professional request to a colleague. Include a courteous greeting, clear context for the request, specific details of what you're asking for, any relevant deadlines or constraints, an explanation of why this request is important, and a polite closing. Maintain a collegial, respectful tone throughout. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a professional and clear request to a colleague with proper context"
+    },
+    "feature_request_format": {
+        "name": "Feature Request Format",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as a technical feature request. Structure it with sections for feature summary, problem statement/user need, proposed solution, technical requirements, potential implementation approaches, expected benefits, and success metrics. Use precise technical language and provide sufficient detail for developers to understand the scope and purpose of the requested feature. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a detailed technical feature request with clear requirements and rationale"
+    },
+    "changelog_format": {
+        "name": "Changelog Format",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as a structured changelog. Organize changes into categories (Added, Changed, Fixed, Removed, Security, Deprecated), use bullet points for each entry, include version numbers if available, add dates for each version or change group, and maintain a concise, technical tone. Focus on what changed rather than why, and ensure each entry clearly communicates the modification made. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a structured changelog with categorized entries and clear version tracking"
+    },
+    "status_update_format": {
+        "name": "Status Update Format",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as a professional status update for a work context. Include sections for accomplishments since last update, current priorities, blockers or challenges, next steps, and any assistance needed. Use concise bullet points, highlight key metrics or deliverables, maintain a professional tone, and ensure the update provides a clear picture of progress and plans. Add a brief executive summary at the beginning if the update is lengthy. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a professional status update with clear sections for accomplishments, priorities, and next steps"
+    },
+    "budget_request_format": {
+        "name": "Budget Request Format",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as a formal budget request in a business context. Include sections for executive summary, project background, detailed cost breakdown, justification for each expense, expected ROI or benefits, timeline for fund utilization, alternatives considered, and requested approval actions. Use precise financial terminology, include specific amounts and timeframes, and maintain a professional, persuasive tone that emphasizes business value. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a comprehensive budget request with detailed cost justification and expected benefits"
+    },
+    "approval_request_format": {
+        "name": "Approval Request Format",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as a formal approval request in a business context. Include sections for request summary, background context, detailed description of what requires approval, business justification, impact analysis (risks and benefits), timeline considerations, required resources, and specific approval actions requested. Use clear, professional language, highlight decision points explicitly, and provide sufficient information for decision-makers to evaluate the request thoroughly. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a structured approval request with clear justification and specific approval actions needed"
+    },
+    "general_note_format": {
+        "name": "General Note Format",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as a clear, well-structured note. Add appropriate headings if needed, organize information logically, use bullet points for lists, ensure proper paragraph spacing, and maintain a clean, readable format. Preserve the original meaning while enhancing clarity and organization. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a standard note with clear organization and structure"
+    },
+    "whatsapp_message_format": {
+        "name": "Whatsapp Message Format",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a concise WhatsApp message. Make it as brief as possible by removing unnecessary words, using common abbreviations, eliminating formalities, and focusing only on essential information. The result should be conversational, direct, and suitable for instant messaging. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a brief WhatsApp message, optimized for instant messaging"
+    },
+    "sms_message_format": {
+        "name": "Sms Message Format",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into an SMS message, strictly limiting it to 160 characters maximum (the standard SMS character limit). Prioritize essential information, use abbreviations where appropriate, remove all unnecessary words, and ensure the core message is preserved despite the severe length constraint. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as an SMS message with strict 160-character limit"
+    },
+    "word_character_count_constraint": {
+        "name": "Word/character Count Constraint",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following text to fit within the specified word or character limit while preserving the most important information. If a specific count is mentioned in the text (e.g., '100 words'), use that as the maximum. Prioritize key points, remove redundancies, and ensure the result remains coherent and complete despite the constraints. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Enforces specified word or character count limits while preserving essential content"
+    },
+    "out_of_office_responder": {
+        "name": "Out-of-office Responder",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as a professional out-of-office email auto-response. Include a clear statement of absence, specific absence dates, reason for unavailability (if provided), alternative contact information for urgent matters, expected response timeframe upon return, and an appropriate sign-off. Maintain a professional but friendly tone and ensure all essential information is presented concisely. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as an out-of-office automatic email response with absence details and alternative contacts"
+    },
+    "auto_reply": {
+        "name": "Auto-reply Message",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as an automatic reply message. Create a concise, informative response that acknowledges receipt of communication, sets clear expectations for follow-up or processing time, provides any necessary next steps or alternative actions, and maintains a professional tone. The message should be formatted appropriately for automated responses across email or messaging platforms. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as an automatic reply message with clear expectations and next steps"
+    },
+    "preserve_placeholders": {
+        "name": "Preserve Placeholder Values",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text while preserving all placeholder values (such as [NAME], {DATE}, <EMAIL>, etc.). Improve the structure, clarity, and presentation of the text, but ensure that any placeholder markers and their contents remain intact and in their original format. These placeholders will be replaced with actual values later, so they must be preserved exactly as dictated. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text while ensuring all placeholder values remain intact for later replacement"
+    },
+    "transactional_email": {
+        "name": "Transactional Email",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as a transactional notification email. Structure it with a clear subject line, concise greeting, specific details of the transaction or event, any required action items highlighted prominently, relevant reference numbers or dates, and appropriate closing with contact information if needed. Use a professional, straightforward tone typical of automated system notifications while maintaining clarity and accessibility. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a transactional notification email with clear structure and action items"
+    },
+    "marketing_email": {
+        "name": "Marketing Email",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as an engaging marketing email. Structure it with an attention-grabbing subject line, personalized greeting, compelling opening that highlights value proposition, concise body with clear benefits (not just features), prominent call-to-action, sense of urgency or special offer if applicable, and professional sign-off. Use persuasive language, short paragraphs, and a conversational yet professional tone that encourages recipient engagement and action. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a persuasive marketing email with compelling value proposition and clear call-to-action"
+    },
+    "ai_system_prompt": {
+        "name": "Ai System Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text as a system prompt for configuring an AI assistant. Structure it with a clear definition of the assistant's role, specific instructions on how the assistant should behave, knowledge domains it should draw from, tone and style guidelines, constraints or limitations, and format expectations for responses. Begin with 'You are a [role]' and use direct, imperative language throughout. The result should follow standard conventions for AI system prompts that effectively guide an assistant's behavior. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Formats text as a system prompt for configuring AI assistants with clear role definition and behavioral instructions"
+    },
+    "context_data_extraction": {
+        "name": "Context Data Extraction",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Extract only the specific context data from the following text that would be useful for setting context in an AI system. Identify the user by name and reformat the content in third person. Convert first-person references to third-person statements. Present the information as a streamlined, condensed series of factual statements without commentary. Focus only on relevant context data such as preferences, background information, technical details, and specific requirements. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Extracts and reformats context data in third person for use in AI system context windows"
+    },
+    "software_generation_prompt": {
+        "name": "Software Generation Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a clear prompt for generating software. Structure it with sections for context, requirements, constraints, and expected deliverables. Specify the programming language, frameworks, design patterns, and any specific implementation details. Include acceptance criteria and performance expectations where applicable. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Reformats text as a structured prompt for AI-based software generation with clear requirements"
+    },
+    "code_editing_prompt": {
+        "name": "Code Editing Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a precise prompt for editing existing code. Include sections for the current code structure, specific changes needed, rationale for changes, and any constraints to consider. Specify file paths, function names, or classes that need modification, and describe the expected behavior after the changes. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Reformats text as a prompt for AI tools to make specific edits to an existing codebase"
+    },
+    "debugging_prompt": {
+        "name": "Debugging Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a structured debugging prompt. Include sections for the observed issue, expected behavior, error messages or logs, environment details, steps to reproduce, and any troubleshooting already attempted. Format code snippets and error messages for readability. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Reformats text as a prompt for AI-assisted debugging of code issues with comprehensive context"
+    },
+    "feature_addition_prompt": {
+        "name": "Feature Addition Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a prompt for adding new features to existing code. Include sections for the current codebase structure, detailed feature requirements, integration points with existing code, expected behavior, and any performance or compatibility considerations. Specify how the new feature should interact with existing functionality. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Reformats text as a prompt for AI tools to implement new features in an existing codebase"
+    },
+    "css_edit_prompt": {
+        "name": "Css Edit Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following text into a prompt for CSS modifications. Include sections for the current styling, specific changes needed, responsive design requirements, browser compatibility considerations, and any design system constraints. Reference specific selectors, properties, and values where possible. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Reformats text as a prompt for AI-assisted CSS styling modifications with specific design requirements"
+    },
+    "ui_ux_edit_prompt": {
+        "name": "Ui/ux Edit Prompt",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a prompt for UI/UX improvements. Include sections for the current interface design, user experience issues to address, proposed changes, accessibility requirements, and success metrics. Reference specific components, interactions, and user flows that need enhancement. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Reformats text as a prompt for AI-assisted UI/UX improvements with focus on user experience and accessibility"
+    },
+    "domain_name": {
+        "name": "Domain Name Registration",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Translate the following technical writing into a concise, user-friendly format suitable for registering a domain name. Provide essential details such as domain extension, registrar information, and contact data. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using domain name registration style or format"
+    },
+    "poetic_summarization": {
+        "name": "Poetic Summary",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following scientific article in poetic form, focusing on key concepts, findings, and implications. Use metaphors, similes, and other literary devices to convey complex ideas. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using poetic summary style or format"
+    },
+    "conversational_scripting": {
+        "name": "Conversational Scripting",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Generate a conversational dialogue for a customer service script based on the following product specifications. Ensure the tone is friendly, informative, and empathetic. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using conversational scripting style or format"
+    },
+    "journalese_transformation": {
+        "name": "Journalistic Transformation",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following technical writing into journalistic style, incorporating elements of news writing such as headlines, ledes, and quote sources. Maintain a neutral tone. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using journalistic transformation style or format"
+    },
+    "infotainment_storytelling": {
+        "name": "Infotainment Storytelling",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Create an engaging infotainment story around the following data analysis results. Use storytelling techniques to make complex statistics and findings accessible to a wider audience. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using infotainment storytelling style or format"
+    },
+    "dystopian_future": {
+        "name": "Dystopian Future",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the given text into a futuristic, dystopian narrative. Replace everyday objects with sci-fi equivalents and rephrase sentences to convey a sense of hopelessness and rebellion. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Generate a rewritten text in a dark, futuristic setting."
+    },
+    "fairy_tale_reimagining": {
+        "name": "Fairy Tale Reimagining",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Retell the classic fairy tale 'Goldilocks and the Three Bears' from the perspective of the bears. Use an objective tone to reveal their thoughts, feelings, and motivations. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transform a traditional fairy tale into a character-driven narrative."
+    },
+    "journal_entry_analysis": {
+        "name": "Journal Entry Analysis",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Analyze the given journal entry and extract key emotions, themes, and events. Format the results as a concise, chronological summary. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Extract insight from a personal journal entry."
+    },
+    "mystical_mythology": {
+        "name": "Mystical Mythology",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the given text into a mystical, mythological narrative. Use archaic language and symbolism to convey ancient wisdom. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Generate a rewritten text in a mystical, mythological style."
+    },
+    "scientific_report_summary": {
+        "name": "Scientific Report Summary",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Summarize the given scientific report into concise bullet points. Focus on key findings, methodology, and conclusions. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Condense a scientific report into essential information."
+    },
+    "germanize_terms": {
+        "name": "Germanize Technical Terms",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Translate the given technical terms into German while maintaining their original meaning. Replace abbreviations with full English words, and ensure all formatting is consistent with German conventions. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using germanize technical terms style or format"
+    },
+    "generate_acronyms": {
+        "name": "Generate Acronyms From Descriptions",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Create a list of acronyms based on the given descriptions. Each acronym should be derived from its description, and all acronyms must be in alphabetical order. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using generate acronyms from descriptions style or format"
+    },
+    "create_personas": {
+        "name": "Create Personas For Target Audience",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Develop two to three personas based on the provided demographics and psychographics. Each persona should have a unique name, age range, occupation, interests, and goals. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using create personas for target audience style or format"
+    },
+    "summarize_academic_papers": {
+        "name": "Summarize Academic Papers In Journalistic Style",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Condense the given academic paper into a concise summary for a general audience. Ensure all technical terms are explained, and the tone is objective. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using summarize academic papers in journalistic style style or format"
+    },
+    "generate_slang_definitions": {
+        "name": "Generate Slang Definitions From Context",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Create definitions for slang terms found within the given text. Each definition should be concise, informative, and include an example sentence. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using generate slang definitions from context style or format"
+    },
+    "generate_poetry": {
+        "name": "Generate Poetry",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the given prose into a poetic piece, using the original's tone and style but rephrasing it to fit a lyrical format. Emphasize rhythm and meter. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using generate poetry style or format"
+    },
+    "convert_to_code": {
+        "name": "Convert To Code",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Translate the given technical text into a programming code snippet, targeting Python as the primary language. Ensure proper indentation, syntax, and comments. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using convert to code style or format"
+    },
+    "rewrite_news_article": {
+        "name": "Rewrite News Article",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Take the provided news article and rephrase it from a journalistic perspective to a more persuasive and engaging tone, focusing on emotional storytelling. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using rewrite news article style or format"
+    },
+    "create_conversationDialogue": {
+        "name": "Create Conversation Dialogue",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Develop a natural-sounding conversation between two characters, incorporating their distinct personalities, backgrounds, and motivations. Ensure coherent dialogue flow and context. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using create conversation dialogue style or format"
+    },
+    "generate_memo": {
+        "name": "Generate Memo",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the given text as a formal memo to an executive or team leader, including a clear subject line, concise summary, and action items. Use proper business tone and structure. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using generate memo style or format"
+    },
+    "dystopian_news_article": {
+        "name": "Dystopian News Article",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the given news article into a dystopian-themed narrative, incorporating elements of science fiction and social commentary. Use descriptive language to create an immersive atmosphere. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using dystopian news article style or format"
+    },
+    "old_book_report": {
+        "name": "Old Book Report",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following book report in the style of a classic literary critic from the early 20th century. Incorporate historical references and use formal, academic language to analyze the novel's themes and characters. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using old book report style or format"
+    },
+    "scientific_abstract": {
+        "name": "Scientific Abstract",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Condense the following scientific text into a concise abstract, highlighting the main research question, methodology, results, and conclusions. Use technical vocabulary and adhere to standard scientific formatting conventions. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using scientific abstract style or format"
+    },
+    "poetic_biography": {
+        "name": "Poetic Biography",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the given biography into a poetic tribute, using verse and metaphor to capture the subject's essence and life story. Emphasize key moments and themes that define their character. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using poetic biography style or format"
+    },
+    "product_review_summary": {
+        "name": "Product Review Summary",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Summarize the following product review as a concise, neutral summary. Extract the main pros and cons, and format them in a clear and easy-to-read table or list. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using product review summary style or format"
+    },
+    "persianize_text": {
+        "name": "Persianize Text",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Take the following text and convert it into Modern Persian (Farsi). Replace English words with their Persian equivalents, adjust sentence structure to conform to Farsi grammar rules, and ensure proper use of diacritical marks. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using persianize text style or format"
+    },
+    "scientific_paper_summary": {
+        "name": "Scientific Paper Summary",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Condense the following scientific paper into a concise summary paragraph. Preserve key findings, research methods, and conclusions, but omit unnecessary details. Use technical vocabulary relevant to the field. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using scientific paper summary style or format"
+    },
+    "convert_to_old_style_english": {
+        "name": "Convert To Old Style English",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into Early Modern English (circa 1500-1700). Update vocabulary, adjust sentence structure to conform to early modern grammar rules, and incorporate stylistic features characteristic of this era. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using convert to old style english style or format"
+    },
+    "google_review_transcript": {
+        "name": "Google Review Transcript",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following review text as a Google review. Include rating, brief summary of the experience, and specific details about what made the reviewer happy or unhappy with their visit. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using google review text style or format"
+    },
+    "create_academic_abstract": {
+        "name": "Create Academic Abstract",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Write an abstract for the following research paper. Condense the main findings into a concise paragraph (150-200 words), using technical vocabulary and formatting guidelines typical of academic journals. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using create academic abstract style or format"
+    },
+    "satz_transformation": {
+        "name": "Satz Transformation",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Take the following prose and break it down into its constituent sentence structures. Rearrange these sentences to create new, cohesive narratives while maintaining a consistent tone and style. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using satz transformation style or format"
+    },
+    "emoji_code_translation": {
+        "name": "Emoji Code Translation",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Given an emoji code (e.g., ':smile:') or its English representation (e.g. 'smiling face'), translate it into its corresponding visual representation and provide the output in both formats. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using emoji code translation style or format"
+    },
+    "film Dialogue Cleanup": {
+        "name": "Film Dialogue Cleanup",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Clean up film dialogue to remove unnecessary words, clarify ambiguous expressions, and improve overall clarity while maintaining the original intent and tone of the script. Ensure consistent formatting throughout. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using film dialogue cleanup style or format"
+    },
+    "news_article_summary": {
+        "name": "News Article Summary",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Condense a news article into a concise summary highlighting key points, dates, and figures. Use proper grammar and style to make the summary readable by non-experts. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using news article summary style or format"
+    },
+    "danish_translator": {
+        "name": "Danish Translator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Translate the following English text into Danish, taking care to preserve cultural nuances and colloquialisms. Use formal language suitable for official documents. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using danish translator style or format"
+    },
+    "cultural_summarizer": {
+        "name": "Cultural Summarizer",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Summarize a piece of writing in 2-3 sentences that capture its cultural context and significance, highlighting key themes or motifs. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using cultural summarizer style or format"
+    },
+    "dialogue_paraphraser": {
+        "name": "Dialogue Paraphraser",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Paraphrase the following dialogue to preserve the speaker's intent and emotional tone while rephrasing it in more formal language. Use a neutral tone. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using dialogue paraphraser style or format"
+    },
+    "literary_analysis": {
+        "name": "Literary Analysis",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Analyze a piece of writing from a literary perspective, identifying symbolism, motifs, and themes. Provide evidence to support your claims and offer insights into the author's intentions. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using literary analysis style or format"
+    },
+    "technical_report_generator": {
+        "name": "Technical Report Generator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following technical report as a standard document in the field of engineering or science. Include sections for introduction, methodology, results, and conclusions, using proper formatting and terminology. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using technical report generator style or format"
+    },
+    "germanize_names": {
+        "name": "Germanize Names",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Take the following list of names and replace all non-Germanic first names with their German equivalents. Also, ensure that the last name is in the standard German format (e.g., surname followed by a comma and then the person's title). Use Wikipedia as a reference for translations. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using germanize names style or format"
+    },
+    "extract_email_threads": {
+        "name": "Extract Email Threads",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Extract all email conversations from the following text, grouping them into separate threads. Identify the sender, recipient, and main topic of each thread. Use Markdown formatting to represent the conversation flow. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using extract email threads style or format"
+    },
+    "convert_acronyms": {
+        "name": "Convert Acronyms",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Replace all acronyms in the following text with their expanded forms (e.g., 'NASA' becomes 'National Aeronautics and Space Administration'). Ensure accuracy by using a reliable source as a reference. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using convert acronyms style or format"
+    },
+    "translate_to_journalistic_style": {
+        "name": "Translate To Journalistic Style",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a journalistic tone, focusing on clarity, concision, and engaging storytelling. Use active voice and varied sentence structures to capture the reader's attention. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using translate to journalistic style style or format"
+    },
+    "format_informal_dialogue": {
+        "name": "Format Informal Dialogue",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Take the following conversation and reformat it into a formal, polished discussion suitable for publication or professional presentation. Use proper grammar, punctuation, and formatting to enhance clarity. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using format informal dialogue style or format"
+    },
+    "inverted_text": {
+        "name": "Inverted Text",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Take the following text and invert its meaning. Replace 'true' with 'false', 'yes' with 'no', and vice versa, while maintaining the original syntax and sentence structure. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text by flipping boolean values"
+    },
+    "cultural_translation": {
+        "name": "Cultural Translation",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Translate the following text from one cultural context to another. For example, translate idioms, colloquial expressions, and cultural references that may not have direct equivalents. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Adapts text for different cultural contexts"
+    },
+    "dialogue_tagging": {
+        "name": "Dialogue Tagging",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Identify and label dialogue tags in the following text, such as 'said', 'asked', 'said again', or other phrases used to indicate speaker change. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Extracts and labels dialogue tags"
+    },
+    "sentimental_tone": {
+        "name": "Sentimental Tone",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Detect the sentimental tone of the following text, such as emotional appeals, persuasive language, or objective explanations. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Analyzes sentiment in text"
+    },
+    "paraphrase_summary": {
+        "name": "Paraphrase Summary",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Paraphrase the main ideas of the following text into a concise summary that captures the essence of the original text. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Rewrites text as paraphrased summary"
+    },
+    "interviewTranscript": {
+        "name": "Interview Transcript",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the provided text into a polished, interview-style Q&A. Include question headers, speaker identification, and concise answers in bullet points or numbered list format. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using interview text style or format"
+    },
+    "creativeDialogue": {
+        "name": "Creative Dialogue",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Create an engaging conversation between two characters with distinct personalities, cultures, or professions. Use dialectical expressions, colloquialisms, and idioms to create a richly nuanced dialogue. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using creative dialogue style or format"
+    },
+    "archaicDictionaryEntry": {
+        "name": "Archaic Dictionary Entry",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the provided text in the style of an archaic dictionary entry from a bygone era. Use antiquated vocabulary, jargon, and terminology to convey complex information in a dusty, academic tone. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using archaic dictionary entry style or format"
+    },
+    "latinize_names": {
+        "name": "Latinize Names",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Take the following names and return them in Latinized form, using proper declension and accentuation. For example: 'John' becomes 'Iohannes'. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using latinize names style or format"
+    },
+    "convert_american_to_british_date_format": {
+        "name": "Convert American To British Date Format",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Take the following date string in American format (MM/DD/YYYY) and return it in British format (DD/MM/YYYY). You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using convert american to british date format style or format"
+    },
+    "create_copyright_notice": {
+        "name": "Create Copyright Notice",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Generate a standard copyright notice, including year of publication and your name as author. Format according to CC BY-SA license. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using create copyright notice style or format"
+    },
+    "translate_to_hipster_slang": {
+        "name": "Translate To Hipster Slang",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Take the following text and return it rewritten in hipster slang, using trendy vocabulary and phrases (e.g. 'totally stoked', 'on fleek'). You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using translate to hipster slang style or format"
+    },
+    "create_personality_based_summary": {
+        "name": "Create Personality-based Summary",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Summarize the following text in a style that reflects the author's personality, tone and language. For example: a formal summary for a business report or an informal summary for a blog post. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using create personality-based summary style or format"
+    },
+    "generate_conversational Dialogue": {
+        "name": "Conversational Dialogue Generator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Create a piece of conversational dialogue between two characters with distinct personalities, backgrounds, and motivations. Ensure the conversation flows naturally and reveals character traits. Provide context for the scenario and ensure it's clear who speaks when. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using conversational dialogue generator style or format"
+    },
+    "convert_to_poetic_lyrics": {
+        "name": "Poetic Song Lyrics",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following prose into poetic song lyrics, maintaining the original message but using a lyrical structure, rhyme scheme, and poetic language typical of popular songs. Emphasize emotional expression and storytelling. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using poetic song lyrics style or format"
+    },
+    "translate_toAncient_Greek": {
+        "name": "Ancient Greek Translator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Translate the given text into Ancient Greek, paying attention to idiosyncrasies in grammar, syntax, and vocabulary. Ensure readability while preserving the original meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using ancient greek translator style or format"
+    },
+    "format_as_ancient_ scroll": {
+        "name": "Ancient Scroll Document",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the given text as an ancient scroll document, including formal language, elaborate introductions, and classical formatting. Use authentic-looking parchment layout where possible. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using ancient scroll document style or format"
+    },
+    "generate_technical_specifications": {
+        "name": "Technical Specifications Generator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Create detailed technical specifications for a product or system based on the provided text. Ensure clarity in description, precise measurements, and consistent formatting. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using technical specifications generator style or format"
+    },
+    "generate_sarcastic_text": {
+        "name": "Generate Sarcastic Text",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Take the following input and return it as if written in a sarcastic tone. Use phrases like 'obviously', 'duh', and 'of course' to convey attitude. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using generate sarcastic text style or format"
+    },
+    "convert_to_poetry": {
+        "name": "Convert To Poetry",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following prose into a poem, maintaining the original meaning but using rhyming couplets and a consistent meter. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using convert to poetry style or format"
+    },
+    "summarize_as_a_child": {
+        "name": "Summarize As A Child",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Explain the following text in a way that a child would understand. Use simple vocabulary and short sentences. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using summarize as a child style or format"
+    },
+    "create_acronyms": {
+        "name": "Create Acronyms",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Take the following sentence or phrase and create an acronym from it, where each word becomes the first letter of a new word. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using create acronyms style or format"
+    },
+    "rewrite_from_a_differsent_perspective": {
+        "name": "Rewrite From A Different Perspective",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text to be written from the point of view and with the voice of someone who strongly disagrees with the original author's opinions. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using rewrite from a different perspective style or format"
+    },
+    "create_poetry": {
+        "name": "Create Poetry",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Take the following paragraph and transform it into a poetic piece, using metaphors, similes, and other literary devices to convey emotions and ideas. Try to maintain a consistent rhythm and meter. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using create poetry style or format"
+    },
+    "technical_writing_style": {
+        "name": "Technical Writing Style",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following text according to technical writing standards, including proper headings, subheadings, bullet points, and numbered lists. Ensure clarity and concision in the presentation of complex information. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using technical writing style style or format"
+    },
+    "summarize_conversation": {
+        "name": "Summarize Conversation",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Extract the key points from a conversation and condense them into a brief summary, focusing on main ideas, agreements, and disagreements. Use proper grammar and punctuation. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using summarize conversation style or format"
+    },
+    "translate_to_indirect_speech": {
+        "name": "Translate To Indirect Speech",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following direct speech into indirect speech, using verb forms such as 'it is said' or 'he replied'. Maintain the original meaning and tone. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using translate to indirect speech style or format"
+    },
+    "generate_dialogue_tags": {
+        "name": "Generate Dialogue Tags",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Add dialogue tags to the following text, using proper punctuation and capitalization. Ensure that action beats and character names are included. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using generate dialogue tags style or format"
+    },
+    "dystopian_rewriting": {
+        "name": "Dystopian Rewriting",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text into a dystopian sci-fi narrative. Replace descriptive words with dark, ominous terms and rephrase sentences to create a sense of foreboding and unease. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using dystopian rewriting style or format"
+    },
+    "emoji_encryption": {
+        "name": "Emoji Encryption",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Encrypt the following message using emojis. Each word should be represented by a unique emoji. Use punctuation marks as needed to separate words. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using emoji encryption style or format"
+    },
+    "chinese_character_transcription": {
+        "name": "Chinese Character Transcription",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transcribe the following Chinese characters into Romanized English. Ensure accuracy and attention to detail. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using chinese character textion style or format"
+    },
+    "historical_date_code": {
+        "name": "Historical Date Code",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following text to include a historical date code based on the year of publication. Use a standardized format (e.g., ISO 8601) and replace all other dates with 'Unknown' if necessary. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using historical date code style or format"
+    },
+    "abnormal_word_replacement": {
+        "name": "Abnormal Word Replacement",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Replace common words in the following text with their less common or slang alternatives. Focus on words that change meaning significantly when replaced (e.g., 'normal' -> 'average', 'big' -> 'enormous'). You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using abnormal word replacement style or format"
+    },
+    "convert_to_axiom": {
+        "name": "Convert To Axiom",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Translate the given text into a formal axiom, using logical operators and standard mathematical notation. Ensure the resulting statement is precise and unambiguous. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using convert to axiom style or format"
+    },
+    "generate_chapter_abstracts": {
+        "name": "Generate Chapter Abstracts",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Extract key sentences from a series of academic papers and rephrase them as concise chapter abstracts, highlighting main research questions and findings. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using generate chapter abstracts style or format"
+    },
+    "create_informal_dialogue": {
+        "name": "Create Informal Dialogue",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the given formal text into an informal dialogue between two people, using contractions, colloquialisms, and natural speech patterns. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using create informal dialogue style or format"
+    },
+    "translate_to_indonesian_idiolect": {
+        "name": "Translate To Indonesian Idiolect",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Adapt the given text into a unique dialect of the Indonesian language, incorporating local expressions, idioms, and cultural nuances. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using translate to indonesian idiolect style or format"
+    },
+    "rewrite_as_newsheadline": {
+        "name": "Rewrite As News Headline",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the given text into a compelling news headline that captures the essence of the original message, using attention-grabbing words and phrases. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using rewrite as news headline style or format"
+    },
+    "generate_paraphrase": {
+        "name": "Generate Paraphrase",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Take the following article and generate a rewritten version with similar meaning but distinct wording. Aim for a 10% increase in readability while maintaining the original content's core ideas. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using generate paraphrase style or format"
+    },
+    "standardize_acronyms": {
+        "name": "Standardize Acronyms",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Replace all instances of acronyms and abbreviations with their full expansions, ensuring consistency throughout the text. Use reliable sources to verify correct spellings and pronunciations. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using standardize acronyms style or format"
+    },
+    "convert_to_prose": {
+        "name": "Convert To Prose",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Transform the following technical specification into a detailed prose description, focusing on the underlying principles and concepts rather than specific implementation details. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using convert to prose style or format"
+    },
+    "create_summary_outro": {
+        "name": "Create Summary Outro",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Write a summary section for the given text, capturing its main points and providing a concise overview. Ensure the tone is informative and engaging, suitable for an audience interested in the topic. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using create summary outro style or format"
+    },
+    "generate_conversational_tone": {
+        "name": "Generate Conversational Tone",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Rewrite the following formal document to adopt a conversational tone, making it more approachable and friendly while maintaining its original substance. Use everyday language and avoid jargon whenever possible. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using generate conversational tone style or format"
+    },
+    "german_to_french": {
+        "name": "German To French Translation",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Translate the following text from German to French, maintaining the original meaning and idioms. Use formal language and consider regional variations. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using german to french translation style or format"
+    },
+    "code_commenting": {
+        "name": "Code Commenting",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Add descriptive comments to the provided code snippet in a style consistent with popular programming languages (e.g., Java, Python). Focus on explaining complex logic, functions, and variables. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using code commenting style or format"
+    },
+    "formal_email_reply": {
+        "name": "Formal Email Reply",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Format the following email as a formal reply. Use proper salutations, maintain the original tone, and include a clear response to the main points discussed. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using formal email reply style or format"
+    },
+    "data_description": {
+        "name": "Data Description",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Write a comprehensive description of the provided data set, including statistics, visualizations, and notable insights. Assume a general audience familiar with data concepts. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using data description style or format"
+    },
+    "literary_work_summary": {
+        "name": "Literary Work Summary",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Condense the following literary work into a concise summary. Focus on key plot points, character arcs, and themes, using proper literary terminology. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using literary work summary style or format"
+    },
+    "poetry_compression": {
+        "name": "Poetry Compression",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Take the following poetic text and compress it into a concise version, preserving the original meaning but reducing words to their essential components. Use techniques like alliteration, assonance, and consonance to enhance the musicality of the poem. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using poetry compression style or format"
+    },
+    "press_release_conversion": {
+        "name": "Press Release Conversion",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Convert the following formal news article into a press release format, including a catchy headline, concise summary, and boilerplate paragraph. Ensure the tone remains professional and attention-grabbing. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using press release conversion style or format"
+    },
+    "dialogue_analysis": {
+        "name": "Dialogue Analysis",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Analyze the dialogue in the following script to identify key conversations, speaker motivations, and relationships between characters. Provide a breakdown of each scene and suggest ways to improve character development. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using dialogue analysis style or format"
+    },
+    "technical_report_abstraction": {
+        "name": "Technical Report Abstraction",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Summarize the following technical report in a concise abstract, highlighting key findings, methodology, results, and conclusions. Use technical terms accurately and avoid jargon to ensure accessibility. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using technical report abstraction style or format"
+    },
+    "song_lyrics_translation": {
+        "name": "Song Lyrics Translation",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Translate the following song lyrics into another language, taking care to preserve the original meaning, tone, and poetic devices used. Consider cultural nuances and idiomatic expressions that may not translate directly. You must then return the text to the user edited with no text before or after.",
+        "requires_json": true,
+        "description": "Transforms text using song lyrics translation style or format"
+    },
+    "convert_to_rhyme": {
+        "name": "Convert To Rhyme",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Take the following prose and convert it into a rhyming poem, maintaining the original meaning and tone. Use as much of the original text as possible while adapting it to fit the rhyme scheme. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using convert to rhyme style or format"
+    },
+    "edit_for_fundraising": {
+        "name": "Edit For Fundraising",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Take the following content and rewrite it to be more appealing to donors, focusing on emotional storytelling and clear calls-to-action. Use persuasive language and rhetorical devices to motivate readers to support a cause. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using edit for fundraising style or format"
+    },
+    "generate_casus_versus_glossa": {
+        "name": "Casus Versus Glossa Translator",
+        "prompt": "Your task is to take the text submitted by the user. Then apply the following edits: Translate the following Latin text into Modern English, using the style of Casus Versus Glossa (also known as 'Latin-English' translation). This involves literal translations of individual words and phrases while taking care to preserve the nuances of meaning. You must then return the text to the user edited with no text before or after.",
+        "requires_json": false,
+        "description": "Transforms text using casus versus glossa style or format"
+    }
+}

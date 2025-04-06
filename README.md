@@ -1,6 +1,6 @@
 #  Linux Whisper Transcription Notepad - Simple Version 
 
-![alt text](screenshots/3.png)
+ ![alt text](screenshots/v2/image.png)
 
  This version of a speech to text transcription notepad for Linux is a simplified version of a previous configuration that I created also using AI code generation. 
 
