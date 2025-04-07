@@ -687,7 +687,7 @@ class WhisperNotepadApp(QMainWindow):
             openai.api_key = self.config["api_key"]
             
         # Configure SSL verification (always disable for now to fix the issue)
-        #openai.requestssession = self._get_unverified_session()
+        openai.requestssession = self._get_unverified_session()
             
         # Initialize UI
         self.init_ui()
