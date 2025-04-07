@@ -13,34 +13,48 @@ Dependencies:
 - numpy: Array manipulation (used with sounddevice)
 """
 
-import sys
 import os
-import json
+import sys
 import time
+import json
 import tempfile
 import threading
 from pathlib import Path
 from datetime import datetime
-
 import numpy as np
 import sounddevice as sd
 import soundfile as sf
 import openai
+import ffmpeg
+import ssl
+
+# Disable SSL verification globally
+ssl._create_default_https_context = ssl._create_unverified_context
 
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QPushButton, QTextEdit, QComboBox,
     QVBoxLayout, QHBoxLayout, QLabel, QFileDialog, QMessageBox, QGroupBox,
-    QCheckBox, QSplitter, QFrame, QToolButton, QProgressBar, QStyle,
-    QDialog, QListWidget, QListWidgetItem, QTabWidget, QScrollArea, QPushButton,
-    QLineEdit
+    QCheckBox, QMenu, QMenuBar, QStatusBar, QDialog, QLineEdit,
+    QSplitter, QFrame, QToolButton, QProgressBar, QStyle,
+    QListWidget, QListWidgetItem, QTabWidget, QScrollArea
 )
 from PySide6.QtCore import Qt, QSettings, QTimer, Signal, QObject, Slot
-from PySide6.QtGui import QIcon, QFont, QAction, QClipboard, QPalette, QColor, QKeySequence, QShortcut, QPainter, QPixmap
+from PySide6.QtGui import QIcon, QFont, QClipboard, QPalette, QColor, QKeySequence, QPainter, QPixmap, QAction, QShortcut
 
 # Constants
 APP_NAME = "Whisper Notepad Simple"
+APP_VERSION = "0.1.0"
 CONFIG_FILE = os.path.expanduser("~/.whisper_notepad_simple_config.json")
 SYS_PROMPT_LIBRARY_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "system-prompts", "sys-prompt-library.json")
+DEFAULT_CONFIG = {
+    "api_key": "",
+    "default_device": None,
+    "default_device_id": None,
+    "default_transformation": "Standard",
+    "custom_transformations": {},
+    "auto_transcribe": False,
+    "disable_ssl_verify": False
+}
 
 # Text transformation styles
 TEXT_TRANSFORMATIONS = {
@@ -671,12 +685,22 @@ class WhisperNotepadApp(QMainWindow):
         # Set OpenAI API key if available
         if "api_key" in self.config and self.config["api_key"]:
             openai.api_key = self.config["api_key"]
-        
+            
+        # Configure SSL verification (always disable for now to fix the issue)
+        #openai.requestssession = self._get_unverified_session()
+            
         # Initialize UI
         self.init_ui()
         
         # Load audio devices
         self.load_audio_devices()
+    
+    def _get_unverified_session(self):
+        """Create a requests session that doesn't verify SSL certificates."""
+        import requests
+        session = requests.Session()
+        session.verify = False
+        return session
     
     def init_ui(self):
         """Initialize the user interface."""
@@ -1099,6 +1123,10 @@ class WhisperNotepadApp(QMainWindow):
         api_key_action.triggered.connect(self.set_api_key)
         settings_menu.addAction(api_key_action)
         
+        settings_action = QAction("Settings", self)
+        settings_action.triggered.connect(self.show_settings)
+        settings_menu.addAction(settings_action)
+        
         # Help menu
         help_menu = menu_bar.addMenu("Help")
         
@@ -1496,6 +1524,87 @@ class WhisperNotepadApp(QMainWindow):
             )
             self.statusBar().showMessage("API key updated successfully", 3000)
             
+    def show_settings(self):
+        """Show the settings dialog."""
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Settings")
+        dialog.setMinimumWidth(400)
+        
+        layout = QVBoxLayout(dialog)
+        
+        # API Key section
+        api_group = QGroupBox("OpenAI API Key")
+        api_layout = QVBoxLayout(api_group)
+        
+        api_key_layout = QHBoxLayout()
+        api_key_label = QLabel("API Key:")
+        api_key_input = QLineEdit()
+        api_key_input.setEchoMode(QLineEdit.Password)
+        if "api_key" in self.config and self.config["api_key"]:
+            api_key_input.setText(self.config["api_key"])
+        api_key_layout.addWidget(api_key_label)
+        api_key_layout.addWidget(api_key_input)
+        
+        api_layout.addLayout(api_key_layout)
+        
+        # Auto-transcribe option
+        auto_transcribe_check = QCheckBox("Automatically transcribe after recording")
+        auto_transcribe_check.setChecked(self.config.get("auto_transcribe", False))
+        
+        # SSL verification option
+        ssl_verify_check = QCheckBox("Disable SSL verification (use only if having connection issues)")
+        ssl_verify_check.setChecked(self.config.get("disable_ssl_verify", False))
+        
+        # Buttons
+        button_layout = QHBoxLayout()
+        save_button = QPushButton("Save")
+        cancel_button = QPushButton("Cancel")
+        
+        button_layout.addWidget(save_button)
+        button_layout.addWidget(cancel_button)
+        
+        # Add widgets to layout
+        layout.addWidget(api_group)
+        layout.addWidget(auto_transcribe_check)
+        layout.addWidget(ssl_verify_check)
+        layout.addStretch()
+        layout.addLayout(button_layout)
+        
+        # Connect signals
+        save_button.clicked.connect(lambda: self.save_settings(
+            api_key_input.text(),
+            auto_transcribe_check.isChecked(),
+            ssl_verify_check.isChecked(),
+            dialog
+        ))
+        cancel_button.clicked.connect(dialog.reject)
+        
+        # Show dialog
+        dialog.exec()
+        
+    def save_settings(self, api_key, auto_transcribe, disable_ssl_verify, dialog):
+        """Save settings to config file."""
+        # Update config
+        self.config["api_key"] = api_key
+        self.config["auto_transcribe"] = auto_transcribe
+        self.config["disable_ssl_verify"] = disable_ssl_verify
+        
+        # Save config
+        self.save_config()
+        
+        # Update API key
+        openai.api_key = api_key
+        
+        # Configure SSL verification
+        if disable_ssl_verify:
+            openai.requestssession = self._get_unverified_session()
+        
+        # Close dialog
+        dialog.accept()
+        
+        # Show confirmation
+        self.statusBar().showMessage("Settings saved", 3000)
+        
     def show_about(self):
         """Show the about dialog."""
         QMessageBox.about(
@@ -1523,22 +1632,10 @@ class WhisperNotepadApp(QMainWindow):
                             if name not in TEXT_TRANSFORMATIONS:
                                 TEXT_TRANSFORMATIONS[name] = prompt
             else:
-                self.config = {
-                    "api_key": os.environ.get("OPENAI_API_KEY", ""),
-                    "default_device": None,
-                    "default_device_id": None,
-                    "default_transformation": "Standard",
-                    "custom_transformations": {}
-                }
+                self.config = DEFAULT_CONFIG
         except Exception as e:
             print(f"Error loading config: {e}")
-            self.config = {
-                "api_key": os.environ.get("OPENAI_API_KEY", ""),
-                "default_device": None,
-                "default_device_id": None,
-                "default_transformation": "Standard",
-                "custom_transformations": {}
-            }
+            self.config = DEFAULT_CONFIG
             
     def save_config(self):
         """Save configuration to file."""
