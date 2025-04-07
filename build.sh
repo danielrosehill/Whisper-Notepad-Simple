@@ -5,9 +5,9 @@
 echo "=== Building Whisper Notepad Simple ==="
 
 # Install PyInstaller if not already installed
-if ! pip show pyinstaller > /dev/null 2>&1; then
+if ! uv pip show pyinstaller > /dev/null 2>&1; then
     echo "Installing PyInstaller..."
-    pip install pyinstaller
+    uv pip install pyinstaller
 fi
 
 # Build the executable
