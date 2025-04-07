@@ -10,11 +10,17 @@ if ! uv pip show pyinstaller > /dev/null 2>&1; then
     uv pip install pyinstaller
 fi
 
+# Clean previous build
+echo "Cleaning previous build..."
+rm -rf build dist
+
 # Build the executable
 echo "Building executable..."
 pyinstaller --name="WhisperNotepadSimple" \
             --onefile \
             --windowed \
+            --hidden-import=sounddevice \
+            --hidden-import=soundfile \
             --add-data="system-prompts:system-prompts" \
             whisper_notepad_simple.py
 
