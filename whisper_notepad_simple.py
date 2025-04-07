@@ -43,7 +43,7 @@ from PySide6.QtGui import QIcon, QFont, QClipboard, QPalette, QColor, QKeySequen
 
 # Constants
 APP_NAME = "Whisper Notepad Simple"
-APP_VERSION = "0.1.0"
+APP_VERSION = "4"
 CONFIG_FILE = os.path.expanduser("~/.whisper_notepad_simple_config.json")
 SYS_PROMPT_LIBRARY_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "system-prompts", "sys-prompt-library.json")
 DEFAULT_CONFIG = {
