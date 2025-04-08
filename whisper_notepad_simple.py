@@ -648,7 +648,10 @@ class SystemPromptSelector(QWidget):
     
     def create_category_widget(self, category, prompts):
         """Create a dropdown widget for a category of prompts."""
-        group_box = QGroupBox(category)
+        # Format the category name for better readability
+        formatted_category = self.format_category_name(category)
+        
+        group_box = QGroupBox(formatted_category)
         group_box.setCheckable(False)
         
         layout = QVBoxLayout(group_box)
@@ -659,8 +662,10 @@ class SystemPromptSelector(QWidget):
         
         # Add prompts to list
         for prompt_id, title, content, _ in prompts:
-            item = QListWidgetItem(title)
-            item.setData(Qt.UserRole, (prompt_id, title, content))
+            # Clean up the title by removing redundant words
+            clean_title = self.clean_prompt_title(title)
+            item = QListWidgetItem(clean_title)
+            item.setData(Qt.UserRole, (prompt_id, clean_title, content))
             list_widget.addItem(item)
         
         # Connect double-click to add prompt
@@ -675,6 +680,39 @@ class SystemPromptSelector(QWidget):
         
         return group_box
     
+    def format_category_name(self, category):
+        """Format category name for better readability."""
+        # Replace hyphens with spaces
+        formatted = category.replace('-', ' ')
+        
+        # Split by underscores and capitalize each word
+        if '_' in formatted:
+            words = formatted.split('_')
+            formatted = ' '.join(word.capitalize() for word in words)
+        
+        # Handle special cases
+        formatted = formatted.replace('And', 'and')
+        
+        # Ensure first letter is capitalized for each word
+        formatted = ' '.join(word.capitalize() for word in formatted.split())
+        
+        return formatted
+    
+    def clean_prompt_title(self, title):
+        """Remove redundant words from prompt titles."""
+        # List of words to remove if they appear at the end of the title
+        redundant_suffixes = [
+            " Format", " Prompt", " Email", " Tone", " Style",
+            " Generator", " Builder", " Creator", " Tool", " Writer"
+        ]
+        
+        clean_title = title
+        for suffix in redundant_suffixes:
+            if clean_title.endswith(suffix):
+                clean_title = clean_title[:-len(suffix)]
+        
+        return clean_title
+    
     def add_prompt_to_selected(self, prompt_data):
         """Add a prompt to the selected prompts list."""
         prompt_id, title, content, category = prompt_data
@@ -685,8 +723,15 @@ class SystemPromptSelector(QWidget):
             if item.data(Qt.UserRole)[0] == prompt_id:
                 return  # Already in list
         
+        # Format category name
+        formatted_category = self.format_category_name(category)
+        
+        # Clean title if needed
+        if isinstance(title, str) and any(title.endswith(suffix) for suffix in [" Format", " Prompt", " Email", " Tone"]):
+            title = self.clean_prompt_title(title)
+        
         # Add to list
-        item = QListWidgetItem(f"{category}: {title}")
+        item = QListWidgetItem(f"{formatted_category}: {title}")
         item.setData(Qt.UserRole, (prompt_id, title, content, category))
         self.selected_list.addItem(item)
         
