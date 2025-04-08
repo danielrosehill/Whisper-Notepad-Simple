@@ -60,6 +60,8 @@ DEFAULT_CONFIG = {
 TEXT_TRANSFORMATIONS = {
     "Standard": "You are a text formatting assistant. Your ONLY task is to take the raw text provided by the user and reformat it for clarity and readability. Specifically:\n\n1. Adjust spacing and paragraph structure for better readability\n2. Fix grammar, spelling, and punctuation errors\n3. Ensure proper capitalization and sentence structure\n4. Remove filler words, verbal tics, and repetitions\n5. Maintain the original meaning and all crucial information\n6. Organize ideas into logical paragraphs with appropriate headers where needed\n7. Make light edits for clarity where appropriate\n\nIMPORTANT: Do NOT respond as if you are an AI assistant. Do NOT add any commentary, explanations, or responses to the text. Simply return the reformatted version of the exact text provided. The output should ONLY be the reformatted text, nothing else.",
     
+    "Minimal Cleanup": "Your task is to take the text submitted by the user and apply basic cleanup. Add missing punctuation, fix obvious typos, add appropriate paragraph breaks, and ensure proper spacing. Do not add any headers, commentary, or additional formatting. Return only the cleaned text with no additional text before or after.",
+    
     "Email Format": "You are a text formatting assistant. Your ONLY task is to take the raw text provided by the user and reformat it into a professional email format. Specifically:\n\n1. Create a proper email structure with greeting and sign-off\n2. Organize content into clear paragraphs\n3. Fix grammar, spelling, and punctuation errors\n4. Remove filler words and verbal tics\n5. Maintain a professional tone throughout\n6. Keep the original meaning and all crucial information\n7. Add appropriate subject line if context allows\n\nIMPORTANT: Do NOT respond as if you are an AI assistant. Do NOT add any commentary, explanations, or responses to the text. Simply return the reformatted version as a professional email. The output should ONLY be the reformatted email text, nothing else.",
     
     "Voice Prompt": "You are a text formatting assistant. Your ONLY task is to take the raw text provided by the user and reformat it into a clear, concise voice prompt suitable for AI voice assistants. Specifically:\n\n1. Make the text direct, clear, and conversational\n2. Remove unnecessary words and phrases\n3. Fix grammar and structure for natural speech patterns\n4. Format as a direct instruction or query\n5. Maintain the original intent and all crucial information\n6. Optimize for voice recognition systems\n\nIMPORTANT: Do NOT respond as if you are an AI assistant. Do NOT add any commentary, explanations, or responses to the text. Simply return the reformatted version as a voice prompt. The output should ONLY be the reformatted voice prompt, nothing else.",
@@ -495,175 +497,248 @@ class CleanupThread(QObject):
             self.error.emit(f"Error during GPT cleanup: {str(e)}")
 
 
-class SystemPromptDialog(QDialog):
-    """Dialog for selecting system prompts from the library."""
+class SystemPromptSelector(QWidget):
+    """Widget for selecting and chaining multiple system prompts."""
     
-    def __init__(self, parent=None, current_transformations=None):
+    prompt_changed = Signal()
+    
+    def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("System Prompt Library")
-        self.setMinimumSize(700, 500)
-        self.current_transformations = current_transformations or {}
-        self.selected_prompt = None
-        self.all_prompts = []  # Store all prompts for searching
+        self.selected_prompts = []
+        self.all_prompts = []
+        self.category_widgets = {}
         self.init_ui()
         
     def init_ui(self):
-        """Initialize the dialog UI."""
-        layout = QVBoxLayout(self)
+        """Initialize the UI components."""
+        self.main_layout = QVBoxLayout(self)
+        self.main_layout.setContentsMargins(0, 0, 0, 0)
+        self.main_layout.setSpacing(5)
         
-        # Add search box
-        search_layout = QHBoxLayout()
-        search_label = QLabel("Search:")
-        self.search_box = QLineEdit()
-        self.search_box.setPlaceholderText("Type to search prompts...")
-        self.search_box.textChanged.connect(self.filter_prompts)
-        search_layout.addWidget(search_label)
-        search_layout.addWidget(self.search_box)
-        layout.addLayout(search_layout)
+        # Create scroll area for categories
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         
-        # Create list widget for prompts
-        self.list_widget = QListWidget()
-        self.list_widget.setAlternatingRowColors(True)
-        self.list_widget.itemClicked.connect(self.on_item_selected)
+        # Container widget for scroll area
+        scroll_content = QWidget()
+        self.scroll_layout = QVBoxLayout(scroll_content)
+        self.scroll_layout.setContentsMargins(0, 0, 0, 0)
+        self.scroll_layout.setSpacing(10)
+        self.scroll_layout.setAlignment(Qt.AlignTop)
         
-        # Load prompts from library
-        self.load_prompts()
+        scroll_area.setWidget(scroll_content)
+        self.main_layout.addWidget(scroll_area)
         
-        # Add list widget to layout
-        layout.addWidget(self.list_widget)
+        # Add quick buttons for common transformations
+        quick_buttons_group = QGroupBox("Quick Format Options")
+        quick_buttons_layout = QHBoxLayout(quick_buttons_group)
         
-        # Add buttons
-        button_layout = QHBoxLayout()
-        self.cancel_button = QPushButton("Cancel")
-        self.cancel_button.clicked.connect(self.reject)
-        self.select_button = QPushButton("Select")
-        self.select_button.clicked.connect(self.accept_selection)
-        self.select_button.setEnabled(False)
+        # Create common transformation buttons
+        self.create_quick_button("Social Forums", quick_buttons_layout)
+        self.create_quick_button("Email Format", quick_buttons_layout)
+        self.create_quick_button("Journal Entry", quick_buttons_layout)
+        self.create_quick_button("To-Do List", quick_buttons_layout)
+        self.create_quick_button("Note to Self", quick_buttons_layout)
         
-        button_layout.addWidget(self.cancel_button)
-        button_layout.addWidget(self.select_button)
-        layout.addLayout(button_layout)
+        self.main_layout.addWidget(quick_buttons_group)
         
+        # Add selected prompts display
+        selected_group = QGroupBox("Selected Prompts")
+        selected_layout = QVBoxLayout(selected_group)
+        
+        self.selected_list = QListWidget()
+        self.selected_list.setAlternatingRowColors(True)
+        self.selected_list.setMaximumHeight(100)
+        
+        # Add buttons to manage selected prompts
+        buttons_layout = QHBoxLayout()
+        
+        self.clear_button = QPushButton("Clear All")
+        self.clear_button.clicked.connect(self.clear_selected_prompts)
+        
+        self.remove_button = QPushButton("Remove Selected")
+        self.remove_button.clicked.connect(self.remove_selected_prompt)
+        
+        buttons_layout.addWidget(self.clear_button)
+        buttons_layout.addWidget(self.remove_button)
+        
+        selected_layout.addWidget(self.selected_list)
+        selected_layout.addLayout(buttons_layout)
+        
+        self.main_layout.addWidget(selected_group)
+        
+    def create_quick_button(self, name, layout):
+        """Create a quick access button for common transformations."""
+        button = QPushButton(name)
+        button.clicked.connect(lambda checked, n=name: self.quick_select_prompt(n))
+        layout.addWidget(button)
+        
+    def quick_select_prompt(self, name):
+        """Handle quick selection button clicks."""
+        # Map button names to actual prompt IDs
+        prompt_map = {
+            "Social Forums": "basic-cleanup",
+            "Email Format": "business-email",
+            "Journal Entry": "journal-entry",
+            "To-Do List": "todo-list",
+            "Note to Self": "note-to-self"
+        }
+        
+        # Find the prompt in all_prompts
+        prompt_id = prompt_map.get(name)
+        if prompt_id:
+            for prompt in self.all_prompts:
+                if prompt[0] == prompt_id:  # Check if ID matches
+                    self.add_prompt_to_selected(prompt)
+                    break
+    
     def load_prompts(self):
-        """Load prompts from the system prompt library file."""
+        """Load prompts from the updated system prompts JSON file."""
         try:
-            # Check if library file exists
-            if not os.path.exists(SYS_PROMPT_LIBRARY_FILE):
-                QMessageBox.warning(self, "Error", f"System prompt library file not found: {SYS_PROMPT_LIBRARY_FILE}")
+            # Path to the updated system prompts file
+            updated_prompts_file = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)), 
+                "system-prompts", 
+                "updated-system-prompts.json"
+            )
+            
+            # Check if file exists
+            if not os.path.exists(updated_prompts_file):
+                QMessageBox.warning(self, "Error", f"System prompts file not found: {updated_prompts_file}")
                 return
                 
             # Load prompts from file
-            with open(SYS_PROMPT_LIBRARY_FILE, "r") as f:
+            with open(updated_prompts_file, "r") as f:
                 prompts = json.load(f)
                 
-            # Define categories for grouping
-            categories = {
-                "Document Formats": ["readme", "guide", "how-to", "document", "documentation", "article", "report"],
-                "Email & Communication": ["email", "whatsapp", "message", "reply"],
-                "Summarization": ["summary", "extract", "bullet", "executive", "bottom line"],
-                "Conversion": ["convert", "csv", "json", "sql"],
-                "Style & Tone": ["formal", "informal", "tone", "slang", "old english", "shakespeare", "hipster", "jargon"],
-                "Business": ["business", "proposal", "budget", "time sheet", "job", "cover letter", "approval"],
-                "Creative": ["poetry", "creative", "prose", "dialogue"],
-            }
+            # Process prompts and organize by category
+            categories = {}
+            self.all_prompts = []
             
-            # Process prompts and categorize them
-            categorized_prompts = []
+            for prompt in prompts:
+                category = prompt.get("category", "Miscellaneous")
+                prompt_id = prompt.get("id", "")
+                title = prompt.get("title", "")
+                content = prompt.get("content", "")
+                
+                # Store prompt data
+                prompt_data = (prompt_id, title, content, category)
+                self.all_prompts.append(prompt_data)
+                
+                # Add to category dictionary
+                if category not in categories:
+                    categories[category] = []
+                categories[category].append(prompt_data)
             
-            for key, prompt in prompts.items():
-                name = prompt.get("name", "")
-                description = prompt.get("description", "")
-                prompt_text = prompt.get("prompt", "")
-                
-                # Skip if already in current transformations
-                if name in self.current_transformations:
-                    continue
-                
-                # Determine category
-                category = "Miscellaneous"
-                for cat_name, keywords in categories.items():
-                    if any(keyword in name.lower() or keyword in description.lower() for keyword in keywords):
-                        category = cat_name
-                        break
-                
-                # Add to categorized prompts
-                categorized_prompts.append((category, key, name, description, prompt_text))
-                
-            # Sort by category and then by name
-            categorized_prompts.sort(key=lambda x: (x[0], x[2]))
+            # Clear existing categories
+            for widget in self.category_widgets.values():
+                self.scroll_layout.removeWidget(widget)
+                widget.deleteLater()
+            self.category_widgets = {}
             
-            # Store all prompts for searching
-            self.all_prompts = categorized_prompts
-            
-            # Add prompts to list widget
-            self.populate_list_widget(categorized_prompts)
+            # Create category dropdowns
+            for category, prompts in sorted(categories.items()):
+                category_widget = self.create_category_widget(category, prompts)
+                self.scroll_layout.addWidget(category_widget)
+                self.category_widgets[category] = category_widget
                 
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Error loading system prompts: {str(e)}")
     
-    def populate_list_widget(self, prompts):
-        """Populate the list widget with the given prompts."""
-        self.list_widget.clear()
+    def create_category_widget(self, category, prompts):
+        """Create a dropdown widget for a category of prompts."""
+        group_box = QGroupBox(category)
+        group_box.setCheckable(False)
         
-        current_category = None
+        layout = QVBoxLayout(group_box)
         
-        for category, key, name, description, prompt_text in prompts:
-            # Add category header if it's a new category
-            if category != current_category:
-                category_item = QListWidgetItem(f"--- {category} ---")
-                category_item.setFlags(Qt.ItemIsEnabled)  # Make it non-selectable
-                category_item.setBackground(QColor(230, 230, 230))  # Light gray background
-                category_item.setForeground(QColor(0, 0, 0))  # Black text
-                font = category_item.font()
-                font.setBold(True)
-                category_item.setFont(font)
-                self.list_widget.addItem(category_item)
-                current_category = category
-            
-            # Add prompt item
-            item = QListWidgetItem(f"  {name}")
-            item.setToolTip(description)
-            item.setData(Qt.UserRole, (key, name, prompt_text))
-            self.list_widget.addItem(item)
+        # Create list widget for prompts
+        list_widget = QListWidget()
+        list_widget.setAlternatingRowColors(True)
+        
+        # Add prompts to list
+        for prompt_id, title, content, _ in prompts:
+            item = QListWidgetItem(title)
+            item.setData(Qt.UserRole, (prompt_id, title, content))
+            list_widget.addItem(item)
+        
+        # Connect double-click to add prompt
+        list_widget.itemDoubleClicked.connect(lambda item: self.add_prompt_to_selected((
+            item.data(Qt.UserRole)[0],
+            item.data(Qt.UserRole)[1],
+            item.data(Qt.UserRole)[2],
+            category
+        )))
+        
+        layout.addWidget(list_widget)
+        
+        return group_box
     
-    def filter_prompts(self):
-        """Filter prompts based on search text."""
-        search_text = self.search_box.text().lower()
+    def add_prompt_to_selected(self, prompt_data):
+        """Add a prompt to the selected prompts list."""
+        prompt_id, title, content, category = prompt_data
         
-        if not search_text:
-            # If no search text, show all prompts
-            self.populate_list_widget(self.all_prompts)
+        # Check if already in list
+        for i in range(self.selected_list.count()):
+            item = self.selected_list.item(i)
+            if item.data(Qt.UserRole)[0] == prompt_id:
+                return  # Already in list
+        
+        # Add to list
+        item = QListWidgetItem(f"{category}: {title}")
+        item.setData(Qt.UserRole, (prompt_id, title, content, category))
+        self.selected_list.addItem(item)
+        
+        # Update selected prompts
+        self.update_selected_prompts()
+    
+    def remove_selected_prompt(self):
+        """Remove the selected prompt from the list."""
+        selected_items = self.selected_list.selectedItems()
+        if not selected_items:
             return
+            
+        # Remove selected items
+        for item in selected_items:
+            row = self.selected_list.row(item)
+            self.selected_list.takeItem(row)
+            
+        # Update selected prompts
+        self.update_selected_prompts()
+    
+    def clear_selected_prompts(self):
+        """Clear all selected prompts."""
+        self.selected_list.clear()
+        self.update_selected_prompts()
+    
+    def update_selected_prompts(self):
+        """Update the list of selected prompts."""
+        self.selected_prompts = []
         
-        # Filter prompts that match the search text
-        filtered_prompts = []
-        for category, key, name, description, prompt_text in self.all_prompts:
-            if (search_text in name.lower() or 
-                search_text in description.lower() or 
-                search_text in category.lower()):
-                filtered_prompts.append((category, key, name, description, prompt_text))
+        for i in range(self.selected_list.count()):
+            item = self.selected_list.item(i)
+            prompt_id, title, content, category = item.data(Qt.UserRole)
+            self.selected_prompts.append((prompt_id, title, content))
+            
+        # Emit signal that prompts have changed
+        self.prompt_changed.emit()
+    
+    def get_combined_prompt(self):
+        """Get the combined system prompt from all selected prompts."""
+        if not self.selected_prompts:
+            return "Your task is to take the text submitted by the user and apply basic cleanup. Add missing punctuation, fix obvious typos, add appropriate paragraph breaks, and ensure proper spacing. Do not add any headers, commentary, or additional formatting. Return only the cleaned text with no additional text before or after."
         
-        # Update the list widget with filtered prompts
-        self.populate_list_widget(filtered_prompts)
-    
-    def on_item_selected(self, item):
-        """Handle item selection."""
-        data = item.data(Qt.UserRole)
-        if data:
-            self.selected_prompt = data
-            self.select_button.setEnabled(True)
-        else:
-            # If a category header is selected, disable the select button
-            self.select_button.setEnabled(False)
-    
-    def accept_selection(self):
-        """Accept the selected prompt."""
-        if self.selected_prompt:
-            self.accept()
-    
-    def get_selected_prompt(self):
-        """Get the selected prompt."""
-        return self.selected_prompt
+        # Combine prompts
+        combined_prompt = "Your task is to take the text submitted by the user and apply the following transformations in sequence:\n\n"
+        
+        for i, (prompt_id, title, content) in enumerate(self.selected_prompts):
+            combined_prompt += f"Step {i+1}: {title}\n{content}\n\n"
+            
+        combined_prompt += "Apply these transformations in order and return only the final transformed text with no additional text before or after."
+        
+        return combined_prompt
+
 
 class WhisperNotepadApp(QMainWindow):
     """Main application window for Whisper Notepad Simple."""
@@ -1648,7 +1723,7 @@ class WhisperNotepadApp(QMainWindow):
             for name, prompt in TEXT_TRANSFORMATIONS.items():
                 # Skip default transformations
                 if name not in ["Standard", "Email Format", "Voice Prompt", "System Prompt", 
-                               "Personal Email", "Technical Documentation", "Shakespearean Style"]:
+                               "Personal Email", "Technical Documentation", "Shakespearean Style", "Minimal Cleanup"]:
                     custom_transformations[name] = prompt
                     
             self.config["custom_transformations"] = custom_transformations
@@ -1659,33 +1734,73 @@ class WhisperNotepadApp(QMainWindow):
             print(f"Error saving config: {e}")
             
     def browse_system_prompts(self):
-        """Open the system prompt library dialog."""
+        """Open the system prompt selector dialog."""
         try:
             # Create dialog
-            dialog = SystemPromptDialog(self, TEXT_TRANSFORMATIONS)
+            dialog = QDialog(self)
+            dialog.setWindowTitle("System Prompt Selector")
+            dialog.setMinimumSize(800, 600)
+            
+            # Create layout
+            layout = QVBoxLayout(dialog)
+            
+            # Create prompt selector
+            prompt_selector = SystemPromptSelector(dialog)
+            prompt_selector.load_prompts()
+            layout.addWidget(prompt_selector)
+            
+            # Add buttons
+            button_layout = QHBoxLayout()
+            cancel_button = QPushButton("Cancel")
+            cancel_button.clicked.connect(dialog.reject)
+            apply_button = QPushButton("Apply Selected Prompts")
+            
+            # Connect apply button
+            apply_button.clicked.connect(lambda: self.apply_selected_prompts(prompt_selector, dialog))
+            
+            button_layout.addWidget(cancel_button)
+            button_layout.addWidget(apply_button)
+            layout.addLayout(button_layout)
             
             # Show dialog
-            if dialog.exec() == QDialog.Accepted:
-                # Get selected prompt
-                selected_prompt = dialog.get_selected_prompt()
-                if selected_prompt:
-                    key, name, prompt_text = selected_prompt
-                    
-                    # Add to transformations if not already present
-                    if name not in TEXT_TRANSFORMATIONS:
-                        TEXT_TRANSFORMATIONS[name] = prompt_text
-                        
-                        # Add to combo box
-                        self.transformation_combo.addItem(name)
-                        
-                        # Select the new item
-                        self.transformation_combo.setCurrentText(name)
-                        
-                        # Show confirmation
-                        self.statusBar().showMessage(f"Added prompt: {name}", 3000)
+            dialog.exec()
+            
         except Exception as e:
             self.show_error(f"Error browsing system prompts: {str(e)}")
-
+    
+    def apply_selected_prompts(self, prompt_selector, dialog):
+        """Apply the selected prompts from the selector."""
+        combined_prompt = prompt_selector.get_combined_prompt()
+        
+        # Create a custom transformation name based on selected prompts
+        if prompt_selector.selected_prompts:
+            # Create name from first prompt or use "Custom Chain" if multiple
+            if len(prompt_selector.selected_prompts) == 1:
+                name = prompt_selector.selected_prompts[0][1]  # Use the title of the first prompt
+            else:
+                prompt_names = [p[1] for p in prompt_selector.selected_prompts]
+                name = f"Chain: {' + '.join(prompt_names[:2])}"
+                if len(prompt_names) > 2:
+                    name += f" + {len(prompt_names) - 2} more"
+        else:
+            name = "Minimal Cleanup"
+        
+        # Add to transformations if not already present
+        if name not in TEXT_TRANSFORMATIONS:
+            TEXT_TRANSFORMATIONS[name] = combined_prompt
+            
+            # Add to combo box
+            self.transformation_combo.addItem(name)
+            
+            # Select the new item
+            self.transformation_combo.setCurrentText(name)
+            
+            # Show confirmation
+            self.statusBar().showMessage(f"Added prompt chain: {name}", 3000)
+        
+        # Close dialog
+        dialog.done(QDialog.Accepted)
+        
     def closeEvent(self, event):
         """Handle application close event."""
         # Save config
